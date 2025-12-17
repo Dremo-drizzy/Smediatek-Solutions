@@ -1,0 +1,75 @@
+.body {
+  background: url(https://res.cloudinary.com/elonatech/image/upload/v1709805137/livestreamingPage/Live_Streaming_nc3rvu.jpg);
+  min-height: 80vh;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.body::before {
+  background-color: rgba(19, 19, 19, 0.6);
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+}
+
+.hero-responsive {
+  position: relative;
+  z-index: 1;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.hero-text {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 576px) {
+  .body {
+    min-height: 90vh;
+  }
+  
+  .hero-responsive {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  .hero-text {
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+}
+
+@media (min-width: 577px) and (max-width: 991px) {
+  .body {
+    min-height: 80vh;
+  }
+  
+  .hero-responsive {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  
+  .hero-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+}
+
+@media (min-width: 992px) {
+  .hero-responsive {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+  
+  .hero-text {
+    font-size: 1.2rem;
+    line-height: 1.6;
+  }
+}

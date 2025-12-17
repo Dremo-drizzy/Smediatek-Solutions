@@ -1,0 +1,36 @@
+
+.usp-card {
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  background: white;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  border: none;
+}
+
+.usp-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.ups-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin: 5px auto;
+  transition: background 0.3s ease;
+}
+
+
+.ups-text{
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: rgb(68, 68, 68);
+}
+
+.ups-card-title {
+  font-size: 18px;
+  padding-bottom: 10px;
+}

@@ -1,0 +1,126 @@
+.navbar {
+  padding: 0;
+  outline: none;
+}
+
+.custom-navbar {
+  background-color: transparent !important;
+  transition: all 0.4s ease;
+  backdrop-filter: none;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.custom-navbar.scrolled {
+  background-color: rgba(0, 0, 0, 0.9) !important;
+  backdrop-filter: blur(30px);
+}
+
+.navbar-nav-link {
+  text-decoration: none !important;
+  font-size: 16px;
+  position: relative;
+  color: white;
+  margin-left: 20px;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.navbar-nav-link,
+.navbar-nav .nav-link,
+.navbar .dropdown-toggle,
+.navbar .dropdown-item {
+  text-decoration: none !important;
+}
+
+.navbar-nav-link:hover {
+  color: rgb(69, 69, 255);
+}
+
+.navbar-nav-link::before {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 7px;
+  width: 0;
+  height: 2px;
+  background: rgb(0, 0, 255);
+  transition: width 0.4s ease-in-out;
+}
+
+.navbar-nav-link:hover::before {
+  width: 80%;
+}
+
+.navbar-toggler {
+  background-color: black !important;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+@media (max-width: 991px) {
+  .offcanvas {
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    outline: none;
+  }
+
+  .title {
+    background: linear-gradient(45deg, #00d4ff, #ff6b6b, #4ecdc4, #45b7d1);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 1.5rem;
+    animation: gradientShift 4s ease-in-out infinite;
+    outline: none;
+  }
+
+  .navbar-nav-link {
+    position: relative;
+    transition: all 0.3s ease;
+    outline: none;
+    text-decoration: none !important;
+  }
+
+  .navbar-nav-link::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #00d4ff, #ff6b6b);
+    transition: width 0.4s ease-in-out;
+    border-radius: 0 0 8px 8px;
+  }
+
+  .navbar-nav-link:hover::before {
+    width: 100%;
+  }
+}
+
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.community-links {
+  margin: auto;
+}
+
+.community-links img {
+  width: 30px;
+  height: 30px;
+  margin: 0 10px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.community-links img:hover {
+  transform: scale(1.5);
+}

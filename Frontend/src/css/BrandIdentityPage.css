@@ -1,0 +1,38 @@
+.hero {
+  min-height: 100vh;
+  background: url("https://images.unsplash.com/photo-1506765515384-028b60a970df?auto=format&fit=crop&w=1600&q=80")
+    center/cover no-repeat;
+}
+.hero-title {
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: var(--font-weight-bold);
+}
+.hero-subtitle {
+  font-size: var(--font-size-lg);
+}
+
+.story-section {
+  background: var(--on-surface-color);
+}
+.section-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.showcase {
+  height: 70vh;
+  background: url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1600&q=80")
+    center/cover fixed no-repeat;
+}
+.showcase-title {
+  font-size: var(--font-size-xxl);
+  font-weight: var(--font-weight-bold);
+}
+
+.cta {
+  background: var(--on-surface-color);
+}
+.cta-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+}

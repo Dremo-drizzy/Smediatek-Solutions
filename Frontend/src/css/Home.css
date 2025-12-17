@@ -1,0 +1,60 @@
+.homepage-wrapper {
+  background-color: var(--background-color);
+  font-family: var(--font-family-sans-serif);
+  overflow: hidden;
+}
+
+.parallax-bg {
+  background-color: var(--on-surface-color);
+}
+
+.mid-white{
+  background-color: var(--surface-color);
+}
+
+.home-button, .home-two-button{
+  transition: all 0.4s ease-in-out;
+  margin-top: var(--spacing-sm);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-weight: var(--font-weight-bold);
+  border: 1px solid var(--primary-color);
+}
+.home-button:hover, .home-two-button:hover{
+  background-color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  color: var(--on-primary-color);
+}
+.home-button{
+  background-color: var(--primary-color);
+  color: var(--on-primary-color);
+}
+.home-two-button{
+  background: transparent;
+  color: var(--primary-color);
+}
+
+
+
+
+@media (max-width: 992px) {
+  .home-button {
+    font-size: 1rem;
+    padding: 0.6rem 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .home-button {
+    font-size: 0.9rem;
+    padding: 0.5rem 1.2rem;
+  }
+
+  .button-div{
+    display: block;
+  }
+
+  .home-button i {
+    font-size: 0.9rem;
+  }
+}

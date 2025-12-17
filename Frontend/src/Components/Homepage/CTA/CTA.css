@@ -1,0 +1,23 @@
+.cta-section {
+  background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+  border-radius: 20px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+}
+
+.cta-button{
+  background-color: rgb(196, 208, 253) !important;
+  border: none;
+  color: blue;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 16px;
+  margin-top: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.cta-button:hover{
+  background: linear-gradient(135deg, #2563eb, #7e22ce);
+  color: #ffffff;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}

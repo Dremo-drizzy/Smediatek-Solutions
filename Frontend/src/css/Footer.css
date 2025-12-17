@@ -1,0 +1,49 @@
+.Footer-link {
+  font-size: var(--font-size-base);
+  padding: 0;
+  text-align: start;
+  padding-bottom: var(--spacing-sm);
+  text-decoration: none !important;
+  color: var(--on-primary-color);
+  transition: color 0.4s ease-in-out !important;
+  font-family: var(--font-family-sans-serif);
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ✅ Make sure any anchor tag or nav link inside footer has no underline */
+.Footer-link,
+.Footer a,
+.Footer .nav-link,
+.Footer .dropdown-item {
+  text-decoration: none !important;
+}
+
+.Footer-link:hover {
+  color: blue !important;
+}
+
+.Footer-nav {
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.footer-h2{
+   background: linear-gradient(45deg, #0633f9, #50308d, #704ecd, #08176a);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 2rem;
+    animation: gradientShift 4s ease-in-out infinite;
+    outline: none;
+}
+.Footer {
+  background-color: var(--on-surface-color);
+  color: var(--on-primary-color);
+}
+
+.footer-h2 {
+  color: var(--primary-color);
+}

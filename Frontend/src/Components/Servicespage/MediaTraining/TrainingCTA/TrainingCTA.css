@@ -1,0 +1,25 @@
+.row-cta {
+  background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+  border-radius: 20px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+}
+
+.cta-btn {
+  background-color: #fff !important;
+  color: blue !important;
+  border: none;
+  padding: 12px 30px;
+  font-weight: 600;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+}
+
+.cta-btn:hover {
+  background-color: rgb(72, 72, 249) !important;
+  color: #fff !important;
+  transform: translateY(-3px);
+}
+
+.modal-content {
+  border-radius: 15px;
+}

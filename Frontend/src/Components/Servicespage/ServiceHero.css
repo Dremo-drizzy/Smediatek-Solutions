@@ -1,0 +1,47 @@
+.body {
+  min-height: 80vh;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.body::before {
+  background-color: rgba(0, 0, 0, 0.704);
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+}
+
+.hero-responsive {
+  position: relative;
+  z-index: 1;
+}
+.hero-text {
+    line-height: 1.6;
+  }
+
+
+@media (max-width: 576px) {
+  .body {
+    min-height: 70vh;
+  }
+  
+  .hero-text {
+    line-height: 1.4;
+  }
+}
+
+@media (min-width: 577px) and (max-width: 991px) {
+  .body {
+    min-height: 60vh;
+  }
+  
+  .hero-text {
+    line-height: 1.6;
+  }
+}

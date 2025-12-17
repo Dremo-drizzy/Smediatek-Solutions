@@ -1,0 +1,10 @@
+.brand-card{
+  border-radius: 15px;
+  background: #fbfbfb;
+  transition: all 0.3s ease;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+}
+
+.brand-card:hover {
+  transform: translateY(-6px);
+}

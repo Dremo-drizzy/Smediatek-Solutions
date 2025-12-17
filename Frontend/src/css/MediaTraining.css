@@ -1,0 +1,42 @@
+.media-training-page {
+  font-family: var(--font-family-sans-serif);
+}
+
+.hero-section {
+  height: 90vh;
+  background: url("https://images.unsplash.com/photo-1581091012184-5c5f4f3b4b87") center/cover no-repeat;
+  color: var(--on-primary-color);
+  text-shadow: 0px 2px 6px rgba(0,0,0,0.5);
+}
+
+.hero-title {
+  font-size: var(--font-size-xxl);
+  font-weight: var(--font-weight-bold);
+}
+
+.hero-subtitle {
+  font-size: var(--font-size-lg);
+  margin: var(--spacing-md) 0;
+}
+
+.learn-box {
+  background: var(--background-color);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.program-box {
+  background: var(--surface-color);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.cta-section {
+  background: var(--on-surface-color);
+  color: var(--on-primary-color);
+  padding: var(--spacing-xxl) var(--spacing-md);
+}

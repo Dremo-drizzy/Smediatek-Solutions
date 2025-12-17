@@ -1,0 +1,29 @@
+.growth-card{
+  background-color: rgb(255, 255, 255);
+  border: none;
+  transition: all 0.3s ease;
+  border-radius: 15px;
+}
+.growth-card:hover{
+  background-color: rgb(241, 241, 241);
+  transform: translateY(-6px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.12);
+}
+
+.growth-stat {
+  font-size: 3rem;
+  font-weight: 700;
+  color: rgb(85, 85, 245);
+  line-height: 1;
+}
+.stat-suffix {
+  font-size: 2rem;
+  color: rgb(85, 85, 245);
+  margin-left: 4px;
+}
+
+.growth-title {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  color: #343a40;
+}

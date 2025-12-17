@@ -1,0 +1,37 @@
+.livestreaming-page {
+  font-family: var(--font-family-sans-serif);
+}
+
+.bg-hero-2 {
+  background: var(--surface-color);
+}
+
+.showcase {
+  height: 60vh;
+  background: url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3") center/cover no-repeat;
+  color: var(--on-primary-color);
+  text-shadow: 0px 2px 6px rgba(0,0,0,0.5);
+}
+
+.showcase-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.pricing-card {
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-sm);
+  transition: transform 0.3s;
+}
+
+.pricing-card:hover {
+  transform: translateY(-5px);
+}
+
+.pricing-card.recommended {
+  border: 2px solid var(--secondary-color);
+}
+
+.cta {
+  background: var(--on-surface-color);
+}

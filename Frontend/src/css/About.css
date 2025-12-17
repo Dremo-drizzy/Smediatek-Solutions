@@ -1,0 +1,7 @@
+.about{
+  overflow: hidden;
+}
+
+.black{
+  background-color: var(--on-surface-color);
+}

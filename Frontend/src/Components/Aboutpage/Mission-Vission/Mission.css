@@ -1,0 +1,17 @@
+
+
+.mission-card {
+  background: linear-gradient(360deg, rgb(61, 61, 124), rgb(26, 26, 26));
+  border-radius: 15px;
+  transition: transform 0.3s ease;
+}
+
+.mission-card:hover {
+  transform: translateY(-10px);
+}
+
+
+.mission-icon {
+  font-size: 2.5rem;
+}
+
