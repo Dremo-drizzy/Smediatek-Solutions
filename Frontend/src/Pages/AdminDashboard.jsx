@@ -1,6 +1,6 @@
 // src/pages/AdminDashboard.jsx
 import React from "react";
-import AdminMessages from "../components/AdminMessages";
+import AdminMessages from "../Components/AdminMessages";
 import { Container } from "react-bootstrap";
 import ServiceHero from "../Components/Servicespage/ServiceHero";
 
