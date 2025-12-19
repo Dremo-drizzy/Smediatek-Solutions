@@ -1,5 +1,5 @@
 import { Container, Row, Col } from "react-bootstrap";
-import "./learn.css"
+import "./Learn.css"
 
 function Learn() {
   const learnItems = [
