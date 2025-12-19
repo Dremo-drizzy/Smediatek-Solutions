@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000', // Default backend URL
+  baseURL: 'https://smediatek-solutions.onrender.com', // Default backend URL
   headers: {
     'Content-Type': 'application/json',
   },
