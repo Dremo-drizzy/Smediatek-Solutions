@@ -45,7 +45,7 @@ function LiveCTASection() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/livestream", formData);
+      await axios.post("https://smediatek-solutions.onrender.com/api/livestream", formData);
       setAlert({
         show: true,
         variant: "success",
