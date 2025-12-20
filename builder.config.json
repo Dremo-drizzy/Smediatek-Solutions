@@ -1,6 +1,6 @@
 {
   "command": "npm run dev",
-  "serverUrl": "http://localhost:5173/",
+  "serverUrl": "https://smediatek-solutions.onrender.com",
   "authenticateProxy": false,
   "commitMode": "commits"
 }
