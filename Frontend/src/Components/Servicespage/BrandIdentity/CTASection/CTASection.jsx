@@ -37,7 +37,7 @@ function CTASection() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/brand", formData);
+      await axios.post("https://smediatek-solutions.onrender.com/api/brand", formData);
       setAlert({ show: true, variant: "success", message: "✅ Brand project submitted successfully!" });
       setFormData({ fullName: "", businessName: "", email: "", brandType: "", services: [], description: "" });
       setShow(false);
