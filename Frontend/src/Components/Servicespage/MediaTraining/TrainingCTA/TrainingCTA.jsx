@@ -16,6 +16,7 @@ function TrainingCTA() {
     goals: "",
   });
   const [alert, setAlert] = useState({ show: false, variant: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -23,6 +24,7 @@ function TrainingCTA() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       await axios.post("https://smediatek-solutions.onrender.com", formData);
       setAlert({ show: true, variant: "success", message: "✅ Enrollment submitted successfully!" });
@@ -31,6 +33,8 @@ function TrainingCTA() {
     } catch (error) {
       console.error(error);
       setAlert({ show: true, variant: "danger", message: "❌ Submission failed. Try again." });
+    }finally {
+      setIsSubmitting(false);
     }
     setTimeout(() => setAlert({ show: false, variant: "", message: "" }), 4000);
   };
@@ -106,7 +110,7 @@ function TrainingCTA() {
             </Form.Group>
 
             <Button variant="primary" type="submit" className="w-100">
-              Submit Enrollment
+              {isSubmitting ? "Sending..." : "Submit Enrollment"}
             </Button>
           </Form>
         </Modal.Body>
