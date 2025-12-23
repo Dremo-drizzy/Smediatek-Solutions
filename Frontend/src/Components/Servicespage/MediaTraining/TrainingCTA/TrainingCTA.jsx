@@ -97,12 +97,36 @@ function TrainingCTA() {
               </Form.Select>
             </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Preferred Mode</Form.Label>
-              <Form.Check type="radio" name="mode" label="In-person" value="onsite" onChange={handleChange} required />
-              <Form.Check type="radio" name="mode" label="Online" value="online" onChange={handleChange} required />
-              <Form.Check type="radio" name="mode" label="Hybrid" value="hybrid" onChange={handleChange} required />
-            </Form.Group>
+           <Form.Group className="mb-3">
+  <Form.Label>Preferred Mode</Form.Label>
+
+  <Form.Check
+    type="radio"
+    label="In-person"
+    checked={formData.mode === "onsite"}
+    onChange={() =>
+      setFormData({ ...formData, mode: "onsite" })
+    }
+  />
+
+  <Form.Check
+    type="radio"
+    label="Online"
+    checked={formData.mode === "online"}
+    onChange={() =>
+      setFormData({ ...formData, mode: "online" })
+    }
+  />
+
+  <Form.Check
+    type="radio"
+    label="Hybrid"
+    checked={formData.mode === "hybrid"}
+    onChange={() =>
+      setFormData({ ...formData, mode: "hybrid" })
+    }
+  />
+</Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Tell Us Your Media Goals</Form.Label>
