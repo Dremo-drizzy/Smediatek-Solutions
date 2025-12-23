@@ -24,6 +24,7 @@ function LiveCTASection() {
     details: "",
   });
   const [alert, setAlert] = useState({ show: false, variant: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -44,6 +45,7 @@ function LiveCTASection() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       await axios.post("https://smediatek-solutions.onrender.com/api/livestream", formData);
       setAlert({
@@ -67,6 +69,8 @@ function LiveCTASection() {
         variant: "danger",
         message: "❌ Failed to send request.",
       });
+    }finally {
+      setIsSubmitting(false);
     }
 
     setTimeout(() => setAlert({ show: false, variant: "", message: "" }), 4000);
@@ -194,7 +198,7 @@ function LiveCTASection() {
             </Form.Group>
 
             <Button variant="primary" type="submit" className="w-100">
-              Submit Request
+              {isSubmitting ? "Sending..." : "Submit Request"}
             </Button>
           </Form>
         </Modal.Body>
