@@ -16,6 +16,7 @@ function CTASection() {
     description: "",
   });
   const [alert, setAlert] = useState({ show: false, variant: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -36,6 +37,7 @@ function CTASection() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       await axios.post("https://smediatek-solutions.onrender.com/api/brand", formData);
       setAlert({ show: true, variant: "success", message: "✅ Brand project submitted successfully!" });
@@ -44,6 +46,8 @@ function CTASection() {
     } catch (error) {
       console.error(error);
       setAlert({ show: true, variant: "danger", message: "❌ Failed to send request. Try again." });
+    }finally {
+      setIsSubmitting(false);
     }
     setTimeout(() => setAlert({ show: false, variant: "", message: "" }), 4000);
   };
@@ -132,7 +136,7 @@ function CTASection() {
             </Form.Group>
 
             <Button variant="primary" type="submit" className="w-100">
-              Submit Request
+               {isSubmitting ? "Sending..." : "Submit Request"}
             </Button>
           </Form>
         </Modal.Body>
