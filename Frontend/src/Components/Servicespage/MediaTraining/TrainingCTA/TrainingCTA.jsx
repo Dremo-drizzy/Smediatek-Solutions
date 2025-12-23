@@ -26,7 +26,7 @@ function TrainingCTA() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await axios.post("https://smediatek-solutions.onrender.com", formData);
+      await axios.post("https://smediatek-solutions.onrender.com/api/training", formData);
       setAlert({ show: true, variant: "success", message: "✅ Enrollment submitted successfully!" });
       setFormData({ fullName: "", email: "", phone: "", focus: "", mode: "", goals: "" });
       setShow(false);
