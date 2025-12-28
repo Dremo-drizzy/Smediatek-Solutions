@@ -6,6 +6,8 @@ import "aos/dist/aos.css";
 import "./TrainingCTA.css";
 
 function TrainingCTA() {
+  const API = import.meta.env.VITE_API_URL;
+
   const [show, setShow] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -26,7 +28,7 @@ function TrainingCTA() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await axios.post("https://smediatek-solutions.onrender.com/api/training", formData);
+      await axios.post(`${API}/api/training`, formData);
       setAlert({ show: true, variant: "success", message: "✅ Enrollment submitted successfully!" });
       setFormData({ fullName: "", email: "", phone: "", focus: "", mode: "", goals: "" });
       setShow(false);

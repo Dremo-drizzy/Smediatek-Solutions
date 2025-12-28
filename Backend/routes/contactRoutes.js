@@ -2,7 +2,7 @@ import express from "express";
 import Contact from "../models/Contact.js";
 
 const router = express.Router();
-// ✅ POST /api/contact - Save a new message
+
 router.post("/", async (req, res) => {
   try {
     const { name, email, message } = req.body;
@@ -16,13 +16,13 @@ router.post("/", async (req, res) => {
 
     res.status(201).json({ success: true, message: "Message sent successfully!" });
   } catch (error) {
-    console.error("❌ MongoDB Save Error:", error); // 👈 add this line
+    console.error("❌ MongoDB Save Error:", error); 
     res.status(500).json({ success: false, message: "Something went wrong.", error: error.message });
   }
 });
 
 
-// ✅ GET /api/contact - Fetch all messages (for admin view)
+
 router.get("/", async (req, res) => {
   try {
     const messages = await Contact.find().sort({ createdAt: -1 });
@@ -33,7 +33,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// ✅ DELETE /api/contact/:id - Delete a message by ID
+
 router.delete("/:id", async (req, res) => {
   try {
     const message = await Contact.findByIdAndDelete(req.params.id);

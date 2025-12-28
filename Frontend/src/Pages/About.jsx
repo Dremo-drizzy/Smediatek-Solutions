@@ -21,7 +21,7 @@ function About() {
         bgImage="https://cdn.pixabay.com/photo/2021/03/29/12/16/stairs-6133971_1280.jpg"
       />
 
-      <OurTeam/>
+      <OurTeam />
 
       <div className="black">
         <Mission />
