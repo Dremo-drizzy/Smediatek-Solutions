@@ -6,9 +6,10 @@ import { useEffect } from "react";
 
 function PastStreams() {
   useEffect(() => {
-      AOS.init({ duration: 1000 });
-    }, []);
-  const videos = [
+    AOS.init({ duration: 1000 });
+  }, []);
+
+   const videos = [
     {
       title: "UYPCF Conference 2025",
       url: "https://www.youtube.com/live/6HVkpwyyCQg?si=l3l8BftA8g8A8jwb",
@@ -29,20 +30,37 @@ function PastStreams() {
       <h2 className="text-center orange h1 mb-4">Past Livestreams</h2>
       <Row className="g-4 justify-content-center mx-auto">
         {videos.map((v, i) => (
-          <Col md={4} key={i} data-aos="fade-up"
-            data-aos-delay={v.delay}>
+          <Col
+            md={4}
+            key={i}
+            data-aos="fade-up"
+            data-aos-delay={v.delay}
+          >
             <Card className="h-100 shadow border-0 ">
               <div className="ratio ratio-16x9">
-                <ReactPlayer url={v.url} width="100%" height="100%" controls />
+                <ReactPlayer
+                  url={v.url}
+                  width="100%"
+                  height="100%"
+                  controls
+                />
               </div>
               <Card.Body>
                 <Card.Title>{v.title}</Card.Title>
                 <Card.Text className="text-muted">{v.desc}</Card.Text>
                 <div className="d-flex justify-content-between align-items-center">
-                  <Button variant="outline-primary" size="sm" href={v.url} target="_blank">
+                  <Button
+                    variant="outline-primary"
+                    className=" text-decoration-none"
+                    size="sm"
+                    href={v.url}
+                    target="_blank"
+                  >
                     Open
                   </Button>
-                  <small className="text-muted">2:34:10 • 1.2k views</small>
+                  <small className="text-muted">
+                    {v.time} • {v.views} views
+                  </small>
                 </div>
               </Card.Body>
             </Card>

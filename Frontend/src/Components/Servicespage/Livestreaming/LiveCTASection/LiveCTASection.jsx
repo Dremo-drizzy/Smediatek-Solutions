@@ -14,6 +14,8 @@ import "aos/dist/aos.css";
 import "./LiveCTASection.css";
 
 function LiveCTASection() {
+  const API = import.meta.env.VITE_API_URL;
+  
   const [show, setShow] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -47,7 +49,7 @@ function LiveCTASection() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await axios.post("https://smediatek-solutions.onrender.com/api/livestream", formData);
+      await axios.post(`${API}/api/livestream`, formData);
       setAlert({
         show: true,
         variant: "success",

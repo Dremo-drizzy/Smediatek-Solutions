@@ -1,17 +1,25 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const FeaturedProject = () => {
+  useEffect(() => {
+    AOS.init({ duration: 1000 });
+  }, []);
+
   return (
     <Container>
-      <Row className="align-items-center">
-        <Col md={6}>
+      <Row className="align-items-center" data-aos="fade-up">
+        <Col md={6} data-aos="fade-right">
           <img
-            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f"
+            src="https:
             alt="Featured Project"
             className="img-fluid rounded shadow"
           />
         </Col>
-        <Col md={6}>
+
+        <Col md={6} data-aos="fade-left">
           <h2 className="fw-bold">Featured Project: BOLT Taxi Management</h2>
           <p>
             A comprehensive system for managing drivers, rides, and passengers.

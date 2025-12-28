@@ -11,7 +11,7 @@ function OurServices() {
     AOS.init({ duration: 1000, once: true });
   }, []);
 
-  const services = [
+   const services = [
     {
       title: "Livestreaming",
       subtitle: "Share your story with the world in stunning HD. We offer professional live streaming services for any event, anytime, anywhere.",

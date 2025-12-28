@@ -3,7 +3,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useEffect } from "react";
-import "./WhyLivestreaming.css"; // using same styling
+import "./WhyLivestreaming.css"; 
 
 function WhyLivestreaming() {
   useEffect(() => {
@@ -22,14 +22,14 @@ function WhyLivestreaming() {
       icon: "bi bi-wifi text-success fs-2",
       title: "Reliable Internet & Zero Downtime",
       description:
-        "Our team provides backup connections and technical monitoring to ensure your event stays online without interruption. You can focus on your program — we handle the broadcast stability from start to finish.",
+        "Our team provides backup connections and technical monitoring to ensure your event stays online without interruption. You can focus on your program, we handle the broadcast stability from start to finish.",
       delay: "200",
     },
     {
       icon: "bi bi-people-fill text-warning fs-2",
       title: "Real-Time Engagement",
       description:
-        "We make your livestream interactive. With integrated live chats, audience Q&A, and on-screen comments, your viewers can participate from anywhere — making every stream a shared experience.",
+        "We make your livestream interactive. With integrated live chats, audience Q&A, and on-screen comments, your viewers can participate from anywhere, making every stream a shared experience.",
       delay: "400",
     },
     {
@@ -43,7 +43,7 @@ function WhyLivestreaming() {
       icon: "bi bi-headset text-info fs-2",
       title: "End-to-End Support",
       description:
-        "From pre-event setup and on-site streaming to post-production editing, our experts handle everything. Whether it’s a wedding, conference, or concert — we ensure seamless execution and client satisfaction.",
+        "From pre-event setup and on-site streaming to post-production editing, our experts handle everything. Whether it’s a wedding, conference, or concert, we ensure seamless execution and client satisfaction.",
       delay: "800",
     },
   ];

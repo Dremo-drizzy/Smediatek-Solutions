@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { Navbar, Nav, Offcanvas, Container, NavDropdown } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/SmediaNavbar.css";
@@ -21,7 +21,7 @@ function SmediaNavbar() {
       variant="dark"
     >
       <Container fluid className="px-4">
-        <Navbar.Brand as={Link} to="/">
+        <Navbar.Brand as={NavLink} to="/">
           <img
             src="/smediatek.png"
             alt="Logo"
@@ -42,45 +42,65 @@ function SmediaNavbar() {
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            <Nav className="justify-content-end flex-grow-1 pe-3">
-
-              <Nav.Link as={Link} to="/Home" className="navbar-nav-link">
+            <Nav className="justify-content-end flex-grow-1 pe-3 gap-4 ">
+              <Nav.Link
+                as={NavLink}
+                to="/Home"
+                className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
+              >
                 Home
               </Nav.Link>
-              <Nav.Link as={Link} to="/About" className="navbar-nav-link">
+
+              <Nav.Link
+                as={NavLink}
+                to="/About"
+                className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
+              >
                 About
               </Nav.Link>
 
               <NavDropdown
-                title={<span className="text-white ms-4 ">Services</span>}
+                title="Services"
+                id="services-dropdown"
                 menuVariant="dark"
+                
               >
-                <NavDropdown.Item as={Link} to="/BrandIdentityPage">
-                  BrandIdentityPage
+                <NavDropdown.Item as={Link} to="/BrandIdentityPage" >
+                  Brand Identity
                 </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/Livestreaming">
+                <NavDropdown.Item as={Link} to="/Livestreaming" >
                   Livestreaming
                 </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/MediaTraining">
-                  MediaTraining
+                <NavDropdown.Item as={Link} to="/MediaTraining" >
+                  Media Training
                 </NavDropdown.Item>
               </NavDropdown>
-              <Nav.Link as={Link} to="/Contact" className="navbar-nav-link">
+
+              <Nav.Link
+                as={NavLink}
+                to="/Contact"
+                className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
+              >
                 Contact
               </Nav.Link>
-              <Nav.Link as={Link} to="/Projects" className="navbar-nav-link">
+
+              <Nav.Link
+                as={NavLink}
+                to="/Projects"
+                className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
+              >
                 Projects
               </Nav.Link>
             </Nav>
 
             <div className="community-links visually-hidden">
-              <a href="https://twitter.com" target="_blank">
-                <img src="X.svg" alt="X" />
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+                <img src="/X.svg" alt="X" />
               </a>
-              <a href="https://linkedin.com" target="_blank">
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
                 <img src="/Linkedin.svg" alt="LinkedIn" />
               </a>
-              <a href="https://discord.com" target="_blank">
+              <a href="https://discord.com" target="_blank" rel="noopener noreferrer">
                 <img src="/discord.svg" alt="Discord" />
               </a>
             </div>

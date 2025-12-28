@@ -1,4 +1,4 @@
-// ✅ brandRoutes.js
+
 import express from "express";
 import BrandProject from "../models/BrandProject.js";
 
