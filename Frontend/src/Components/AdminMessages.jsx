@@ -229,7 +229,7 @@ const AdminMessages = () => {
           </Card>
         </Col>
 
-        {/* Media Training Enrollments */}
+        {}
         <Col md={12}>
           <Card className="shadow-sm">
             <Card.Body>

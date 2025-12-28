@@ -6,6 +6,7 @@ import "aos/dist/aos.css";
 import "./CTASection.css";
 
 function CTASection() {
+  const API = import.meta.env.VITE_API_URL;
   const [show, setShow] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -39,7 +40,7 @@ function CTASection() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await axios.post("https://smediatek-solutions.onrender.com/api/brand", formData);
+      await axios.post(`${API}/api/brand`, formData);
       setAlert({ show: true, variant: "success", message: "✅ Brand project submitted successfully!" });
       setFormData({ fullName: "", businessName: "", email: "", brandType: "", services: [], description: "" });
       setShow(false);

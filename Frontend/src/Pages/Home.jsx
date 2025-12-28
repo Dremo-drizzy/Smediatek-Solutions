@@ -14,7 +14,7 @@ function Home() {
       <ServiceHero
         title="Where Media Meets Technology."
         subtitle="We bring your vision to life online. Whether it's through professional live streaming, building a strong brand identity, or providing expert tech training, we create digital experiences that truly connect and deliver."
-        bgImage="https://th.bing.com/th/id/R.eacd25ec346eab881820aac67502d34d?rik=O%2f8RCdN7ttZhjw&riu=http%3a%2f%2fwww.futurefilmmaking.com%2fimages%2frode-filmmaker-kit.jpg&ehk=UlcWJwgndO12niDC7ZbDHWqINwtBDkNvHWObncySPrI%3d&risl=&pid=ImgRaw&r=0"
+        bgImage="https://static.vecteezy.com/system/resources/thumbnails/046/866/784/original/dark-blue-technology-futuristic-elements-video.jpg"
       >
         <Row className="justify-content-center g-4 ">
           <Col lg={5} md={5}>

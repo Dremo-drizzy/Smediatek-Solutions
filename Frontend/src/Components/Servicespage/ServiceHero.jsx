@@ -10,7 +10,7 @@ const ServiceHero = ({ title, subtitle, bgImage, children}) => {
     >
       <Row className="hero-responsive text-center justify-content-center flex-grow-1 align-items-center">
         <Col xs={11} sm={9} md={8} lg={7} xl={6} className="text-white">
-           <h1 className=" display-sm-5 display-md-4 display-lg-3 fw-bold text-white mb-3 mb-md-4">
+           <h1 className=" display-sm-5 display-md-4 display-lg-6 fw-bold text-white mb-3 mb-md-4">
             {title}
           </h1>
           <p className="hero-text">

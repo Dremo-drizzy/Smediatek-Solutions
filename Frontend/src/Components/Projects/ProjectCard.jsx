@@ -1,8 +1,18 @@
 import { Card, Button, Badge } from "react-bootstrap";
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const ProjectCard = ({ project }) => {
+  useEffect(() => {
+    AOS.init({ duration: 1000 });
+  }, []);
+
   return (
-    <Card className="project-card h-100 shadow-sm">
+    <Card
+      className="project-card h-100 shadow-sm"
+      data-aos="fade-up"
+    >
       <Card.Img variant="top" src={project.img} alt={project.title} />
       <Card.Body>
         <Card.Title>{project.title}</Card.Title>

@@ -31,7 +31,7 @@ function CoreValues() {
     {
       icon: "🌍",
       title: "Impact",
-      text: "We're not just about creating great work—we're about making a difference. We're passionate about empowering people and businesses to thrive in the digital world.",
+      text: "We're not just about creating great work we're about making a difference. We're passionate about empowering people and businesses to thrive in the digital world.",
       delay: "600",
     },
   ];

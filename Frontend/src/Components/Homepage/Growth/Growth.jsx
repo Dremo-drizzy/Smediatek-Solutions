@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
-import { Container, Row, Col, Card } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import CountUp from "react-countup";
-import "bootstrap-icons/font/bootstrap-icons.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "./Growth.css";
@@ -49,42 +48,42 @@ function Growth() {
   ];
 
   return (
-    <Container fluid className="py-5">
-      <Row className="g-4 mx-auto">
+    <Container fluid className="growth-container">
+      <Row className="justify-content-center gx-4"> 
         {highlights.map((item, index) => (
           <Col
             key={index}
             md={3}
             sm={6}
             xs={12}
+            className={`${
+              index !== highlights.length - 1 ? "with-divider" : ""
+            } text-center`}
             data-aos="fade-up"
             data-aos-delay={item.delay}
           >
-            <Card className="growth-card text-center w-100 h-100">
-              <Card.Body>
-                {/* CountUp animation */}
-                <div className="mb-2">
-                  <span className="growth-stat">
-                    <CountUp
-                      start={0}
-                      end={item.stat}
-                      duration={2.5}
-                      separator=","
-                      enableScrollSpy
-                      scrollSpyOnce
-                    />
-                    <span className="stat-suffix">{item.suffix}</span>
-                  </span>
-                </div>
+            <div className="growth-item px-3"> 
+              <div className="growth-stat">
+                <CountUp
+                  start={0}
+                  end={item.stat}
+                  duration={2.5}
+                  separator=","
+                  enableScrollSpy
+                  scrollSpyOnce
+                />
+                <span>{item.suffix}</span>
+              </div>
 
-                <Card.Title className="growth-title mt-2">
-                  {item.title}
-                </Card.Title>
-                <Card.Text className="growth-desc">
-                  {item.description}
-                </Card.Text>
-              </Card.Body>
-            </Card>
+              <div className="growth-title mt-3">
+                {item.title}
+              </div>
+
+              <div className="growth-desc px-lg-3 mt-1">
+                {item.description}
+              </div>
+             
+            </div>
           </Col>
         ))}
       </Row>
