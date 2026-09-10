@@ -1,10 +1,12 @@
 import express from "express";
-import TrainingEnrollment from "../models/TrainingEnrollment.js";
+import TrainingEnrollment, { TRAINING_STATUSES } from "../models/TrainingEnrollment.js";
 import auth from "../middleware/auth.js";
 import validate, { trainingSchema, trainingStatusSchema } from "../middleware/validate.js";
 import asyncHandler from "../middleware/asyncHandler.js";
+import { buildFilter, parsePagination, parseSort, buildListResponse } from "../utils/pagination.js";
 
 const router = express.Router();
+const SORT_FIELDS = ["createdAt", "email", "status"];
 
 router.post(
   "/",
@@ -20,9 +22,16 @@ router.get(
   "/",
   auth,
   asyncHandler(async (req, res) => {
-    const filter = req.query.includeDeleted === "true" ? {} : { deletedAt: null };
-    const enrollments = await TrainingEnrollment.find(filter);
-    res.json(enrollments);
+    const filter = buildFilter(req, TRAINING_STATUSES);
+    const { page, limit, skip } = parsePagination(req);
+    const sort = parseSort(req, SORT_FIELDS);
+
+    const [data, total] = await Promise.all([
+      TrainingEnrollment.find(filter).sort(sort).skip(skip).limit(limit),
+      TrainingEnrollment.countDocuments(filter),
+    ]);
+
+    res.json(buildListResponse(data, total, page, limit));
   })
 );
 
