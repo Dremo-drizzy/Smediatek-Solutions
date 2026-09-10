@@ -6,6 +6,7 @@ import contactRoutes from "./routes/contactRoutes.js";
 import brandRoutes from "./routes/brandRoutes.js";
 import liveRoutes from "./routes/liveRoutes.js";
 import trainingRoutes from "./routes/trainingRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.get("/", (req, res) => {
 });
 
 
+app.use("/api/auth", authRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/brand", brandRoutes);
 app.use("/api/livestream", liveRoutes);
