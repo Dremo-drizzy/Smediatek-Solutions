@@ -1,6 +1,6 @@
 import express from "express";
 import TrainingEnrollment, { TRAINING_STATUSES } from "../models/TrainingEnrollment.js";
-import auth from "../middleware/auth.js";
+import auth, { requireRole } from "../middleware/auth.js";
 import validate, { trainingSchema, trainingStatusSchema } from "../middleware/validate.js";
 import asyncHandler from "../middleware/asyncHandler.js";
 import { buildFilter, parsePagination, parseSort, buildListResponse } from "../utils/pagination.js";
@@ -53,6 +53,7 @@ router.patch(
 router.delete(
   "/:id",
   auth,
+  requireRole("admin"),
   asyncHandler(async (req, res) => {
     const deletedEnrollment = await TrainingEnrollment.findByIdAndUpdate(
       req.params.id,

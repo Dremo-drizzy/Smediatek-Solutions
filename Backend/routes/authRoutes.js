@@ -27,11 +27,13 @@ router.post(
       return res.status(401).json({ message: "Invalid email or password." });
     }
 
-    const token = jwt.sign({ id: admin._id, email: admin.email }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const token = jwt.sign(
+      { id: admin._id, email: admin.email, role: admin.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
 
-    res.json({ token });
+    res.json({ token, role: admin.role });
   })
 );
 

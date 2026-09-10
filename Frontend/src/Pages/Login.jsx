@@ -21,6 +21,7 @@ function Login() {
     try {
       const res = await api.post("/auth/login", formData);
       localStorage.setItem("adminToken", res.data.token);
+      localStorage.setItem("adminRole", res.data.role);
       navigate("/Admin");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed. Please try again.");
