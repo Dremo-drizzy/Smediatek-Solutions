@@ -2,19 +2,25 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import helmet from "helmet";
 import contactRoutes from "./routes/contactRoutes.js";
 import brandRoutes from "./routes/brandRoutes.js";
 import liveRoutes from "./routes/liveRoutes.js";
 import trainingRoutes from "./routes/trainingRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import sanitizeRequest from "./middleware/sanitize.js";
+import { apiLimiter } from "./middleware/rateLimiters.js";
 
 dotenv.config();
 
 const app = express();
 
 
+app.use(helmet());
 app.use(cors());
 app.use(express.json());
+app.use(sanitizeRequest);
+app.use("/api", apiLimiter);
 
 
 app.get("/", (req, res) => {
