@@ -20,7 +20,8 @@ router.get(
   "/",
   auth,
   asyncHandler(async (req, res) => {
-    const projects = await BrandProject.find();
+    const filter = req.query.includeDeleted === "true" ? {} : { deletedAt: null };
+    const projects = await BrandProject.find(filter);
     res.json(projects);
   })
 );
@@ -44,7 +45,11 @@ router.delete(
   "/:id",
   auth,
   asyncHandler(async (req, res) => {
-    const deletedProject = await BrandProject.findByIdAndDelete(req.params.id);
+    const deletedProject = await BrandProject.findByIdAndUpdate(
+      req.params.id,
+      { deletedAt: new Date() },
+      { new: true }
+    );
     if (!deletedProject) return res.status(404).json({ error: "Brand project not found" });
     res.json({ message: "Brand project deleted successfully!" });
   })

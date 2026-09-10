@@ -20,7 +20,8 @@ router.get(
   "/",
   auth,
   asyncHandler(async (req, res) => {
-    const requests = await LivestreamRequest.find();
+    const filter = req.query.includeDeleted === "true" ? {} : { deletedAt: null };
+    const requests = await LivestreamRequest.find(filter);
     res.json(requests);
   })
 );
@@ -44,7 +45,11 @@ router.delete(
   "/:id",
   auth,
   asyncHandler(async (req, res) => {
-    const deletedRequest = await LivestreamRequest.findByIdAndDelete(req.params.id);
+    const deletedRequest = await LivestreamRequest.findByIdAndUpdate(
+      req.params.id,
+      { deletedAt: new Date() },
+      { new: true }
+    );
     if (!deletedRequest) return res.status(404).json({ error: "Livestream request not found" });
     res.json({ message: "Livestream request deleted successfully!" });
   })
