@@ -2,11 +2,15 @@
 import React from "react";
 import AdminMessages from "../Components/AdminMessages";
 import AdminStatsChart from "../Components/AdminStatsChart";
+import AdminPortfolioPanel from "../Components/AdminPortfolioPanel";
+import AdminAuditLog from "../Components/AdminAuditLog";
 import { Container } from "react-bootstrap";
 import ServiceHero from "../Components/Servicespage/ServiceHero";
 
 
 function AdminDashboard() {
+  const isAdmin = localStorage.getItem("adminRole") === "admin";
+
   return (
     <div>
       <ServiceHero
@@ -15,7 +19,9 @@ function AdminDashboard() {
       <Container className="py-5">
         <h1 className="text-center mb-4 fw-bold text-primary">Admin Dashboard</h1>
         <AdminStatsChart />
+        {isAdmin && <AdminAuditLog />}
         <AdminMessages />
+        {isAdmin && <AdminPortfolioPanel />}
       </Container>
     </div>
   );
