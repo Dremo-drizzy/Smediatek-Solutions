@@ -19,7 +19,7 @@ function Login() {
     setError("");
 
     try {
-      const res = await api.post("/api/auth/login", formData);
+      const res = await api.post("/auth/login", formData);
       localStorage.setItem("adminToken", res.data.token);
       navigate("/Admin");
     } catch (err) {
