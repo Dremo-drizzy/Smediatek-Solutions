@@ -58,28 +58,29 @@ Visit `http://localhost:5173`. Log in at `/login` with the admin credentials you
 
 ## API Routes
 
-All request/response bodies are JSON. Routes marked "Admin (JWT)" require an `Authorization: Bearer <token>` header with a token obtained from `POST /api/auth/login`; all `/api/*` routes are rate-limited (100 req/15min per IP, 5 req/15min on login).
+All request/response bodies are JSON. Routes marked "Admin (JWT)" require an `Authorization: Bearer <token>` header with a token obtained from `POST /api/v1/auth/login`; all `/api/v1/*` routes are rate-limited (100 req/15min per IP, 5 req/15min on login).
 
 | Method | Path | Auth | Purpose |
 | --- | --- | --- | --- |
 | GET | `/` | Public | Health check |
-| POST | `/api/auth/login` | Public | Admin login — verifies email/password, returns a 7-day JWT |
-| POST | `/api/contact` | Public | Submit a contact form message |
-| GET | `/api/contact` | Admin (JWT) | List contact messages — paginated, filterable, searchable (see below) |
-| PATCH | `/api/contact/:id/status` | Admin (JWT) | Update a contact message's status (`new`/`read`/`archived`) |
-| DELETE | `/api/contact/:id` | Admin (JWT) | Soft-delete a contact message (sets `deletedAt`) |
-| POST | `/api/brand` | Public | Submit a brand identity project request |
-| GET | `/api/brand` | Admin (JWT) | List brand project requests — paginated, filterable, searchable |
-| PATCH | `/api/brand/:id/status` | Admin (JWT) | Update a brand project's status (`new`/`in-progress`/`won`/`lost`) |
-| DELETE | `/api/brand/:id` | Admin (JWT) | Soft-delete a brand project request |
-| POST | `/api/livestream` | Public | Submit a livestreaming service request |
-| GET | `/api/livestream` | Admin (JWT) | List livestreaming requests — paginated, filterable, searchable |
-| PATCH | `/api/livestream/:id/status` | Admin (JWT) | Update a livestream request's status (`new`/`in-progress`/`won`/`lost`) |
-| DELETE | `/api/livestream/:id` | Admin (JWT) | Soft-delete a livestreaming request |
-| POST | `/api/training` | Public | Submit a media training enrollment |
-| GET | `/api/training` | Admin (JWT) | List training enrollments — paginated, filterable, searchable |
-| PATCH | `/api/training/:id/status` | Admin (JWT) | Update a training enrollment's status (`pending`/`confirmed`/`completed`) |
-| DELETE | `/api/training/:id` | Admin (JWT) | Soft-delete a training enrollment |
+| POST | `/api/v1/auth/login` | Public | Admin login — verifies email/password, returns a 7-day JWT |
+| POST | `/api/v1/contact` | Public | Submit a contact form message |
+| GET | `/api/v1/contact` | Admin (JWT) | List contact messages — paginated, filterable, searchable (see below) |
+| PATCH | `/api/v1/contact/:id/status` | Admin (JWT) | Update a contact message's status (`new`/`read`/`archived`) |
+| DELETE | `/api/v1/contact/:id` | Admin (JWT) | Soft-delete a contact message (sets `deletedAt`) |
+| POST | `/api/v1/brand` | Public | Submit a brand identity project request |
+| GET | `/api/v1/brand` | Admin (JWT) | List brand project requests — paginated, filterable, searchable |
+| PATCH | `/api/v1/brand/:id/status` | Admin (JWT) | Update a brand project's status (`new`/`in-progress`/`won`/`lost`) |
+| DELETE | `/api/v1/brand/:id` | Admin (JWT) | Soft-delete a brand project request |
+| POST | `/api/v1/livestream` | Public | Submit a livestreaming service request |
+| GET | `/api/v1/livestream` | Admin (JWT) | List livestreaming requests — paginated, filterable, searchable |
+| PATCH | `/api/v1/livestream/:id/status` | Admin (JWT) | Update a livestream request's status (`new`/`in-progress`/`won`/`lost`) |
+| DELETE | `/api/v1/livestream/:id` | Admin (JWT) | Soft-delete a livestreaming request |
+| POST | `/api/v1/training` | Public | Submit a media training enrollment |
+| GET | `/api/v1/training` | Admin (JWT) | List training enrollments — paginated, filterable, searchable |
+| PATCH | `/api/v1/training/:id/status` | Admin (JWT) | Update a training enrollment's status (`pending`/`confirmed`/`completed`) |
+| DELETE | `/api/v1/training/:id` | Admin (JWT) | Soft-delete a training enrollment |
+| GET | `/api/v1/stats/overview` | Admin (JWT) | Monthly lead counts (last 12 months) and status breakdown, per resource |
 
 ### GET list query parameters
 

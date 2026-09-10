@@ -22,7 +22,7 @@ app.use(helmet());
 app.use(cors({ origin: process.env.FRONTEND_URL }));
 app.use(express.json());
 app.use(sanitizeRequest);
-app.use("/api", apiLimiter);
+app.use("/api/v1", apiLimiter);
 
 
 app.get("/", (req, res) => {
@@ -30,12 +30,12 @@ app.get("/", (req, res) => {
 });
 
 
-app.use("/api/auth", authRoutes);
-app.use("/api/contact", contactRoutes);
-app.use("/api/brand", brandRoutes);
-app.use("/api/livestream", liveRoutes);
-app.use("/api/training", trainingRoutes);
-app.use("/api/stats", statsRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/contact", contactRoutes);
+app.use("/api/v1/brand", brandRoutes);
+app.use("/api/v1/livestream", liveRoutes);
+app.use("/api/v1/training", trainingRoutes);
+app.use("/api/v1/stats", statsRoutes);
 
 app.use(errorHandler);
 
