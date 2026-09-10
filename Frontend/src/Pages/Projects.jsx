@@ -1,160 +1,44 @@
 
-import React, { useEffect } from "react";
-import { Container, Row, Col, Card } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Container, Row, Col, Card, Spinner, Alert } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/Projects.css";
 
-import Book from "../../assets/Bride/Book.jpg";
-import Mug from "../../assets/Bride/Mug.jpg";
-import Shirt from "../../assets/Bride/Shirt.jpg";
-
-import Ad1 from "../../assets/Chocolla/ad-1.jpg";
-import CoffeePouch from "../../assets/Chocolla/Coffee-Pouch.jpg";
-import CoffeePouchEP from "../../assets/Chocolla/Coffee-PouchEP.jpg";
-
-import Bcard3Back from "../../assets/GlobalXT/bcard-3-back.jpg";
-import Cap from "../../assets/GlobalXT/cap.jpg";
-import Polo from "../../assets/GlobalXT/polo.jpg";
-
-import LogoDeepBlue from "../../assets/IEAD/Logo on deep blue.png";
-import WhitePolo from "../../assets/IEAD/White Polo Presentation .png";
-import Youths from "../../assets/IEAD/Youths.png";
-import WaterBottle from "../../assets/IEAD/Water bottle .png";
-
 import ServiceHero from "../Components/Servicespage/ServiceHero";
+import api from "../utils/api";
 
-const sections = [
-  {
-    heading: "Bride",
-    items: [
-      {
-        image: Book,
-        title: "Wedding Invite Design",
-        desc: "Elegant, print-ready invitation with premium typography and gold accents.",
-        subtext:
-          "A luxurious invitation design crafted to set the tone for an unforgettable wedding.",
-        shortDesc: "Elegant Wedding Invite",
-      },
-      {
-        image: Mug,
-        title: "Branded Merchandise",
-        desc: "Custom souvenir mugs designed to match the wedding theme and palette.",
-        subtext:
-          "Personalized mugs that add a memorable touch to the wedding experience.",
-        shortDesc: "Custom Branded Mugs",
-      },
-      {
-        image: Shirt,
-        title: "Bridal Party Apparel",
-        desc: "Coordinated apparel mockups for the bridal party — polished & modern.",
-        subtext:
-          "Stylish apparel ensuring the bridal party looks cohesive and elegant.",
-        shortDesc: "Bridal Party Apparel",
-      },
-    ],
-  },
-
-  {
-    heading: "Chocolla",
-    items: [
-      {
-        image: Ad1,
-        title: "Campaign Poster",
-        desc: "Bold poster artwork for seasonal coffee campaign — warm & rich tones.",
-        subtext:
-          "Eye-catching poster designed to drive excitement for Chocolla’s coffee launch.",
-        shortDesc: "Bold Campaign Poster",
-      },
-      {
-        image: CoffeePouch,
-        title: "Primary Packaging",
-        desc: "Sustainable pouch mockup with tactile finishes and clear branding.",
-        subtext:
-          "Eco-friendly packaging that highlights Chocolla’s premium coffee quality.",
-        shortDesc: "Sustainable Coffee Pouch",
-      },
-      {
-        image: CoffeePouchEP,
-        title: "Extended Packaging Variant",
-        desc: "Retail-ready variation optimized for shelf visibility and barcodes.",
-        subtext:
-          "Designed for retail success with bold branding and practical functionality.",
-        shortDesc: "Retail-Ready Packaging",
-      },
-    ],
-  },
-
-  {
-    heading: "GlobalXT",
-    items: [
-      {
-        image: Bcard3Back,
-        title: "Business Card (Back)",
-        desc: "Minimal corporate card reverse — strong brand mark and contact layout.",
-        subtext:
-          "Sleek business card design reflecting GlobalXT’s professional identity.",
-        shortDesc: "Minimal Business Card",
-      },
-      {
-        image: Cap,
-        title: "Merch Cap",
-        desc: "Branded staff cap design intended for events and promotions.",
-        subtext:
-          "Custom cap for brand visibility during corporate events and promotions.",
-        shortDesc: "Branded Event Cap",
-      },
-      {
-        image: Polo,
-        title: "Uniform Polo",
-        desc: "Staff uniform design — breathable fabric mockup for corporate teams.",
-        subtext:
-          "Comfortable and branded polo for a unified corporate team appearance.",
-        shortDesc: "Corporate Uniform Polo",
-      },
-    ],
-  },
-
-  {
-    heading: "IEAD",
-    items: [
-      {
-        image: LogoDeepBlue,
-        title: "Primary Logo Mark",
-        desc: "Core logo lockup for use across print and digital channels.",
-        subtext: "A versatile logo design embodying IEAD’s mission and values.",
-        shortDesc: "Core Brand Logo",
-      },
-      {
-        image: WhitePolo,
-        title: "Volunteer Polo",
-        desc: "White polo mockup for volunteers, featuring embroidered crest.",
-        subtext:
-          "Professional polo for volunteers, showcasing IEAD’s brand pride.",
-        shortDesc: "Volunteer Branded Polo",
-      },
-      {
-        image: Youths,
-        title: "Youth Program Poster",
-        desc: "Campaign visual aimed at young adults — approachable & vibrant.",
-        subtext:
-          "Engaging poster to inspire and connect with IEAD’s youth community.",
-        shortDesc: "Vibrant Youth Poster",
-      },
-      {
-        image: WaterBottle,
-        title: "Branded Bottle",
-        desc: "Event merchandise bottle with subtle logo placement for giveaways.",
-        subtext:
-          "Practical and branded water bottle for IEAD’s event giveaways.",
-        shortDesc: "Branded Event Bottle",
-      },
-    ],
-  },
-];
+const groupByCategory = (items) =>
+  items.reduce((sections, item) => {
+    let section = sections.find((s) => s.heading === item.category);
+    if (!section) {
+      section = { heading: item.category, items: [] };
+      sections.push(section);
+    }
+    section.items.push(item);
+    return sections;
+  }, []);
 
 const Projects = () => {
+  const [sections, setSections] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    const fetchPortfolio = async () => {
+      try {
+        const res = await api.get("/portfolio");
+        setSections(groupByCategory(res.data));
+      } catch (err) {
+        console.error("❌ Error fetching portfolio:", err);
+        setError("Failed to load portfolio.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPortfolio();
   }, []);
 
   return (
@@ -175,34 +59,42 @@ const Projects = () => {
               crafted to inspire and elevate businesses.
             </p>
 
-            {sections.map((section, sIdx) => (
-              <div key={sIdx} className="mb-5">
-                <h3 className="text-secondary fw-bold mb-3 ">
-                  {section.heading}
-                </h3>
-
-                <Row className="g-4">
-                  {section.items.map((item, i) => (
-                    <Col key={i} xs={12} sm={6} md={3} lg={3}>
-                      <Card className="project-card h-100 w-100">
-                        <div className="project-image-container">
-                          <Card.Img
-                            variant="top"
-                            src={item.image}
-                            alt={`${section.heading}-${i}`}
-                            className="project-image rounded"
-                            loading="lazy"
-                          />
-                          <div className="project-image-overlay">
-                            <p className="project-image-desc">{item.shortDesc}</p>
-                          </div>
-                        </div>
-                      </Card>
-                    </Col>
-                  ))}
-                </Row>
+            {loading ? (
+              <div className="text-center py-5">
+                <Spinner animation="border" className="text-primary" />
               </div>
-            ))}
+            ) : error ? (
+              <Alert variant="danger">{error}</Alert>
+            ) : (
+              sections.map((section, sIdx) => (
+                <div key={sIdx} className="mb-5">
+                  <h3 className="text-secondary fw-bold mb-3 ">
+                    {section.heading}
+                  </h3>
+
+                  <Row className="g-4">
+                    {section.items.map((item) => (
+                      <Col key={item._id} xs={12} sm={6} md={3} lg={3}>
+                        <Card className="project-card h-100 w-100">
+                          <div className="project-image-container">
+                            <Card.Img
+                              variant="top"
+                              src={item.imageUrl}
+                              alt={item.title}
+                              className="project-image rounded"
+                              loading="lazy"
+                            />
+                            <div className="project-image-overlay">
+                              <p className="project-image-desc">{item.description}</p>
+                            </div>
+                          </div>
+                        </Card>
+                      </Col>
+                    ))}
+                  </Row>
+                </div>
+              ))
+            )}
 
             <h3 className="fw-bold pt-5 pb-3 h1 text-center orange">
               Social Media Accounts Managed

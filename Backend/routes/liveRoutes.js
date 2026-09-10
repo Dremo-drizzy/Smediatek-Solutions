@@ -1,9 +1,10 @@
 import express from "express";
 import LivestreamRequest, { LIVESTREAM_STATUSES } from "../models/LivestreamRequest.js";
-import auth from "../middleware/auth.js";
+import auth, { requireRole } from "../middleware/auth.js";
 import validate, { liveSchema, liveStatusSchema } from "../middleware/validate.js";
 import asyncHandler from "../middleware/asyncHandler.js";
 import { buildFilter, parsePagination, parseSort, buildListResponse } from "../utils/pagination.js";
+import { logAction } from "../utils/audit.js";
 
 const router = express.Router();
 const SORT_FIELDS = ["createdAt", "email", "status"];
@@ -46,6 +47,7 @@ router.patch(
       { new: true }
     );
     if (!request) return res.status(404).json({ error: "Livestream request not found" });
+    logAction({ adminId: req.admin.id, action: "status_update", resource: "livestream", resourceId: request._id });
     res.json(request);
   })
 );
@@ -53,6 +55,7 @@ router.patch(
 router.delete(
   "/:id",
   auth,
+  requireRole("admin"),
   asyncHandler(async (req, res) => {
     const deletedRequest = await LivestreamRequest.findByIdAndUpdate(
       req.params.id,
@@ -60,6 +63,7 @@ router.delete(
       { new: true }
     );
     if (!deletedRequest) return res.status(404).json({ error: "Livestream request not found" });
+    logAction({ adminId: req.admin.id, action: "soft_delete", resource: "livestream", resourceId: deletedRequest._id });
     res.json({ message: "Livestream request deleted successfully!" });
   })
 );

@@ -1,9 +1,10 @@
 import express from "express";
 import TrainingEnrollment, { TRAINING_STATUSES } from "../models/TrainingEnrollment.js";
-import auth from "../middleware/auth.js";
+import auth, { requireRole } from "../middleware/auth.js";
 import validate, { trainingSchema, trainingStatusSchema } from "../middleware/validate.js";
 import asyncHandler from "../middleware/asyncHandler.js";
 import { buildFilter, parsePagination, parseSort, buildListResponse } from "../utils/pagination.js";
+import { logAction } from "../utils/audit.js";
 
 const router = express.Router();
 const SORT_FIELDS = ["createdAt", "email", "status"];
@@ -46,6 +47,7 @@ router.patch(
       { new: true }
     );
     if (!enrollment) return res.status(404).json({ error: "Training enrollment not found" });
+    logAction({ adminId: req.admin.id, action: "status_update", resource: "training", resourceId: enrollment._id });
     res.json(enrollment);
   })
 );
@@ -53,6 +55,7 @@ router.patch(
 router.delete(
   "/:id",
   auth,
+  requireRole("admin"),
   asyncHandler(async (req, res) => {
     const deletedEnrollment = await TrainingEnrollment.findByIdAndUpdate(
       req.params.id,
@@ -60,6 +63,7 @@ router.delete(
       { new: true }
     );
     if (!deletedEnrollment) return res.status(404).json({ error: "Training enrollment not found" });
+    logAction({ adminId: req.admin.id, action: "soft_delete", resource: "training", resourceId: deletedEnrollment._id });
     res.json({ message: "Training enrollment deleted successfully!" });
   })
 );
