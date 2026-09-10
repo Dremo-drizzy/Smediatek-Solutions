@@ -11,6 +11,7 @@ const LiveSchema = new mongoose.Schema({
   details: { type: String, trim: true },
   date: { type: Date, default: Date.now },
   status: { type: String, enum: LIVESTREAM_STATUSES, default: LIVESTREAM_STATUSES[0] },
+  deletedAt: { type: Date, default: null },
 });
 
 export default mongoose.model("LivestreamRequest", LiveSchema);

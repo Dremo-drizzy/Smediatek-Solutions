@@ -8,6 +8,7 @@ const ContactSchema = new mongoose.Schema(
     email: { type: String, required: true, lowercase: true, trim: true },
     message: { type: String, required: true, trim: true },
     status: { type: String, enum: CONTACT_STATUSES, default: CONTACT_STATUSES[0] },
+    deletedAt: { type: Date, default: null },
   },
   { timestamps: true }
 );

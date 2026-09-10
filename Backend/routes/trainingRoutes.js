@@ -20,7 +20,8 @@ router.get(
   "/",
   auth,
   asyncHandler(async (req, res) => {
-    const enrollments = await TrainingEnrollment.find();
+    const filter = req.query.includeDeleted === "true" ? {} : { deletedAt: null };
+    const enrollments = await TrainingEnrollment.find(filter);
     res.json(enrollments);
   })
 );
@@ -44,7 +45,11 @@ router.delete(
   "/:id",
   auth,
   asyncHandler(async (req, res) => {
-    const deletedEnrollment = await TrainingEnrollment.findByIdAndDelete(req.params.id);
+    const deletedEnrollment = await TrainingEnrollment.findByIdAndUpdate(
+      req.params.id,
+      { deletedAt: new Date() },
+      { new: true }
+    );
     if (!deletedEnrollment) return res.status(404).json({ error: "Training enrollment not found" });
     res.json({ message: "Training enrollment deleted successfully!" });
   })
