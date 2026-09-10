@@ -11,6 +11,7 @@ const BrandSchema = new mongoose.Schema({
   description: { type: String, trim: true },
   date: { type: Date, default: Date.now },
   status: { type: String, enum: BRAND_STATUSES, default: BRAND_STATUSES[0] },
+  deletedAt: { type: Date, default: null },
 });
 
 export default mongoose.model("BrandProject", BrandSchema);

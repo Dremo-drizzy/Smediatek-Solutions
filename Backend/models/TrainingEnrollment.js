@@ -11,6 +11,7 @@ const TrainingSchema = new mongoose.Schema({
   goals: { type: String, trim: true },
   date: { type: Date, default: Date.now },
   status: { type: String, enum: TRAINING_STATUSES, default: TRAINING_STATUSES[0] },
+  deletedAt: { type: Date, default: null },
 });
 
 export default mongoose.model("TrainingEnrollment", TrainingSchema);

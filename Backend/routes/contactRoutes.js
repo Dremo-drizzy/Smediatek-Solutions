@@ -20,7 +20,8 @@ router.get(
   "/",
   auth,
   asyncHandler(async (req, res) => {
-    const messages = await Contact.find().sort({ createdAt: -1 });
+    const filter = req.query.includeDeleted === "true" ? {} : { deletedAt: null };
+    const messages = await Contact.find(filter).sort({ createdAt: -1 });
     res.json(messages);
   })
 );
@@ -46,7 +47,11 @@ router.delete(
   "/:id",
   auth,
   asyncHandler(async (req, res) => {
-    const message = await Contact.findByIdAndDelete(req.params.id);
+    const message = await Contact.findByIdAndUpdate(
+      req.params.id,
+      { deletedAt: new Date() },
+      { new: true }
+    );
     if (!message) {
       return res.status(404).json({ success: false, message: "Message not found." });
     }
