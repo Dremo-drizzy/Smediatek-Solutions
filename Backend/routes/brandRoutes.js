@@ -1,6 +1,7 @@
 
 import express from "express";
 import BrandProject from "../models/BrandProject.js";
+import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -14,7 +15,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
     const projects = await BrandProject.find();
     res.json(projects);
@@ -23,7 +24,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   try {
     const deletedProject = await BrandProject.findByIdAndDelete(req.params.id);
     if (!deletedProject) return res.status(404).json({ error: "Brand project not found" });

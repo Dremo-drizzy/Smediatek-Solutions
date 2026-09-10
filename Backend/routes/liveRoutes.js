@@ -1,6 +1,7 @@
 
 import express from "express";
 import LivestreamRequest from "../models/LivestreamRequest.js";
+import auth from "../middleware/auth.js";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
@@ -13,7 +14,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
     const requests = await LivestreamRequest.find();
     res.json(requests);
@@ -22,7 +23,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   try {
     const deletedRequest = await LivestreamRequest.findByIdAndDelete(req.params.id);
     if (!deletedRequest) return res.status(404).json({ error: "Livestream request not found" });

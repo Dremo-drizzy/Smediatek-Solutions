@@ -1,5 +1,6 @@
 import express from "express";
 import TrainingEnrollment from "../models/TrainingEnrollment.js";
+import auth from "../middleware/auth.js";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
@@ -12,7 +13,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
     const enrollments = await TrainingEnrollment.find();
     res.json(enrollments);
@@ -22,7 +23,7 @@ router.get("/", async (req, res) => {
 });
 
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   try {
     const deletedEnrollment = await TrainingEnrollment.findByIdAndDelete(req.params.id);
     if (!deletedEnrollment) return res.status(404).json({ error: "Training enrollment not found" });

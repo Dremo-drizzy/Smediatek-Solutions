@@ -1,5 +1,6 @@
 import express from "express";
 import Contact from "../models/Contact.js";
+import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -23,7 +24,7 @@ router.post("/", async (req, res) => {
 
 
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
     const messages = await Contact.find().sort({ createdAt: -1 });
     res.json(messages);
@@ -34,7 +35,7 @@ router.get("/", async (req, res) => {
 });
 
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   try {
     const message = await Contact.findByIdAndDelete(req.params.id);
     if (!message) {
