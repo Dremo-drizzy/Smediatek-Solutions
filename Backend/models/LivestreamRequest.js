@@ -17,6 +17,9 @@ const LiveSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+LiveSchema.index({ email: 1 });
+LiveSchema.index({ createdAt: -1 });
+LiveSchema.index({ status: 1 });
 LiveSchema.index({ fullName: "text", organization: "text", email: "text", eventType: "text", details: "text" });
 
 export default mongoose.model("LivestreamRequest", LiveSchema);
