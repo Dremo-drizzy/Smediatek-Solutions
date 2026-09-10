@@ -37,6 +37,16 @@ export const trainingSchema = z.object({
   goals: z.string().trim().max(2000).optional(),
 });
 
+export const portfolioSchema = z.object({
+  title: z.string().trim().min(1, "Title is required").max(150),
+  category: z.string().trim().min(1, "Category is required").max(100),
+  imageUrl: z.string().trim().min(1, "Image URL is required").max(500),
+  description: z.string().trim().max(2000).optional(),
+  order: z.number().int().optional(),
+});
+
+export const portfolioUpdateSchema = portfolioSchema.partial();
+
 export const contactStatusSchema = z.object({ status: z.enum(CONTACT_STATUSES) });
 export const brandStatusSchema = z.object({ status: z.enum(BRAND_STATUSES) });
 export const liveStatusSchema = z.object({ status: z.enum(LIVESTREAM_STATUSES) });
