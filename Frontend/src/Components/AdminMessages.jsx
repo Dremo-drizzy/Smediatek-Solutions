@@ -14,10 +14,10 @@ const AdminMessages = () => {
     const fetchAllData = async () => {
       try {
         const [contactRes, brandRes, liveRes, trainingRes] = await Promise.all([
-          api.get("/api/contact"),
-          api.get("/api/brand"),
-          api.get("/api/livestream"),
-          api.get("/api/training"),
+          api.get("/contact"),
+          api.get("/brand"),
+          api.get("/livestream"),
+          api.get("/training"),
         ]);
 
         setContactMessages(contactRes.data);
@@ -38,7 +38,7 @@ const AdminMessages = () => {
   const handleDelete = async (id, type) => {
     if (!window.confirm("Are you sure you want to delete this message?")) return;
     try {
-      await api.delete(`/api/${type}/${id}`);
+      await api.delete(`/${type}/${id}`);
 
       if (type === "contact")
         setContactMessages(contactMessages.filter((msg) => msg._id !== id));
