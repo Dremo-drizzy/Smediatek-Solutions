@@ -10,6 +10,7 @@ import trainingRoutes from "./routes/trainingRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import sanitizeRequest from "./middleware/sanitize.js";
 import { apiLimiter } from "./middleware/rateLimiters.js";
+import errorHandler from "./middleware/errorHandler.js";
 
 dotenv.config();
 
@@ -33,6 +34,8 @@ app.use("/api/contact", contactRoutes);
 app.use("/api/brand", brandRoutes);
 app.use("/api/livestream", liveRoutes);
 app.use("/api/training", trainingRoutes);
+
+app.use(errorHandler);
 
 
 const PORT = process.env.PORT || 5000;

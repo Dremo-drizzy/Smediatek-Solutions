@@ -3,11 +3,14 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import Admin from "../models/Admin.js";
 import { loginLimiter } from "../middleware/rateLimiters.js";
+import asyncHandler from "../middleware/asyncHandler.js";
 
 const router = express.Router();
 
-router.post("/login", loginLimiter, async (req, res) => {
-  try {
+router.post(
+  "/login",
+  loginLimiter,
+  asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -29,10 +32,7 @@ router.post("/login", loginLimiter, async (req, res) => {
     });
 
     res.json({ token });
-  } catch (error) {
-    console.error("❌ Login error:", error);
-    res.status(500).json({ message: "Something went wrong." });
-  }
-});
+  })
+);
 
 export default router;
