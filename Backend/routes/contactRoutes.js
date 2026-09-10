@@ -1,10 +1,11 @@
 import express from "express";
 import Contact from "../models/Contact.js";
 import auth from "../middleware/auth.js";
+import validate, { contactSchema } from "../middleware/validate.js";
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/", validate(contactSchema), async (req, res) => {
   try {
     const { name, email, message } = req.body;
 
