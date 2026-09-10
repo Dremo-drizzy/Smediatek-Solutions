@@ -1,10 +1,12 @@
 import express from "express";
-import Contact from "../models/Contact.js";
+import Contact, { CONTACT_STATUSES } from "../models/Contact.js";
 import auth from "../middleware/auth.js";
 import validate, { contactSchema, contactStatusSchema } from "../middleware/validate.js";
 import asyncHandler from "../middleware/asyncHandler.js";
+import { buildFilter, parsePagination, parseSort, buildListResponse } from "../utils/pagination.js";
 
 const router = express.Router();
+const SORT_FIELDS = ["createdAt", "email", "status"];
 
 router.post(
   "/",
@@ -20,9 +22,16 @@ router.get(
   "/",
   auth,
   asyncHandler(async (req, res) => {
-    const filter = req.query.includeDeleted === "true" ? {} : { deletedAt: null };
-    const messages = await Contact.find(filter).sort({ createdAt: -1 });
-    res.json(messages);
+    const filter = buildFilter(req, CONTACT_STATUSES);
+    const { page, limit, skip } = parsePagination(req);
+    const sort = parseSort(req, SORT_FIELDS);
+
+    const [data, total] = await Promise.all([
+      Contact.find(filter).sort(sort).skip(skip).limit(limit),
+      Contact.countDocuments(filter),
+    ]);
+
+    res.json(buildListResponse(data, total, page, limit));
   })
 );
 

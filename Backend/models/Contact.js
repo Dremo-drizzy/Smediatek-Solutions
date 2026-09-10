@@ -13,4 +13,6 @@ const ContactSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+ContactSchema.index({ name: "text", email: "text", message: "text" });
+
 export default mongoose.model("Contact", ContactSchema);

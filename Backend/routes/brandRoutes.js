@@ -1,10 +1,12 @@
 import express from "express";
-import BrandProject from "../models/BrandProject.js";
+import BrandProject, { BRAND_STATUSES } from "../models/BrandProject.js";
 import auth from "../middleware/auth.js";
 import validate, { brandSchema, brandStatusSchema } from "../middleware/validate.js";
 import asyncHandler from "../middleware/asyncHandler.js";
+import { buildFilter, parsePagination, parseSort, buildListResponse } from "../utils/pagination.js";
 
 const router = express.Router();
+const SORT_FIELDS = ["createdAt", "email", "status"];
 
 router.post(
   "/",
@@ -20,9 +22,16 @@ router.get(
   "/",
   auth,
   asyncHandler(async (req, res) => {
-    const filter = req.query.includeDeleted === "true" ? {} : { deletedAt: null };
-    const projects = await BrandProject.find(filter);
-    res.json(projects);
+    const filter = buildFilter(req, BRAND_STATUSES);
+    const { page, limit, skip } = parsePagination(req);
+    const sort = parseSort(req, SORT_FIELDS);
+
+    const [data, total] = await Promise.all([
+      BrandProject.find(filter).sort(sort).skip(skip).limit(limit),
+      BrandProject.countDocuments(filter),
+    ]);
+
+    res.json(buildListResponse(data, total, page, limit));
   })
 );
 
