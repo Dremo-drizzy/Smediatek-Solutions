@@ -4,6 +4,7 @@ import auth, { requireRole } from "../middleware/auth.js";
 import validate, { contactSchema, contactStatusSchema } from "../middleware/validate.js";
 import asyncHandler from "../middleware/asyncHandler.js";
 import { buildFilter, parsePagination, parseSort, buildListResponse } from "../utils/pagination.js";
+import { logAction } from "../utils/audit.js";
 
 const router = express.Router();
 const SORT_FIELDS = ["createdAt", "email", "status"];
@@ -48,6 +49,7 @@ router.patch(
     if (!message) {
       return res.status(404).json({ success: false, message: "Message not found." });
     }
+    logAction({ adminId: req.admin.id, action: "status_update", resource: "contact", resourceId: message._id });
     res.json(message);
   })
 );
@@ -65,6 +67,7 @@ router.delete(
     if (!message) {
       return res.status(404).json({ success: false, message: "Message not found." });
     }
+    logAction({ adminId: req.admin.id, action: "soft_delete", resource: "contact", resourceId: message._id });
     res.json({ success: true, message: "Message deleted successfully!" });
   })
 );

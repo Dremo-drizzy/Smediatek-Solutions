@@ -10,6 +10,7 @@ import trainingRoutes from "./routes/trainingRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import statsRoutes from "./routes/statsRoutes.js";
 import portfolioRoutes from "./routes/portfolioRoutes.js";
+import auditRoutes from "./routes/auditRoutes.js";
 import sanitizeRequest from "./middleware/sanitize.js";
 import { apiLimiter } from "./middleware/rateLimiters.js";
 import errorHandler from "./middleware/errorHandler.js";
@@ -38,6 +39,7 @@ app.use("/api/v1/livestream", liveRoutes);
 app.use("/api/v1/training", trainingRoutes);
 app.use("/api/v1/stats", statsRoutes);
 app.use("/api/v1/portfolio", portfolioRoutes);
+app.use("/api/v1/audit", auditRoutes);
 
 app.use(errorHandler);
 

@@ -4,6 +4,7 @@ import auth, { requireRole } from "../middleware/auth.js";
 import validate, { brandSchema, brandStatusSchema } from "../middleware/validate.js";
 import asyncHandler from "../middleware/asyncHandler.js";
 import { buildFilter, parsePagination, parseSort, buildListResponse } from "../utils/pagination.js";
+import { logAction } from "../utils/audit.js";
 
 const router = express.Router();
 const SORT_FIELDS = ["createdAt", "email", "status"];
@@ -46,6 +47,7 @@ router.patch(
       { new: true }
     );
     if (!project) return res.status(404).json({ error: "Brand project not found" });
+    logAction({ adminId: req.admin.id, action: "status_update", resource: "brand", resourceId: project._id });
     res.json(project);
   })
 );
@@ -61,6 +63,7 @@ router.delete(
       { new: true }
     );
     if (!deletedProject) return res.status(404).json({ error: "Brand project not found" });
+    logAction({ adminId: req.admin.id, action: "soft_delete", resource: "brand", resourceId: deletedProject._id });
     res.json({ message: "Brand project deleted successfully!" });
   })
 );
