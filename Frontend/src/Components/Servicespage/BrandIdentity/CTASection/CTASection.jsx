@@ -40,7 +40,7 @@ function CTASection() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await axios.post(`${API}/api/brand`, formData);
+      await axios.post(`${API}/api/v1/brand`, formData);
       setAlert({ show: true, variant: "success", message: "✅ Brand project submitted successfully!" });
       setFormData({ fullName: "", businessName: "", email: "", brandType: "", services: [], description: "" });
       setShow(false);

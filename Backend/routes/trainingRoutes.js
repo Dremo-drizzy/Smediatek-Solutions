@@ -1,10 +1,12 @@
 import express from "express";
-import TrainingEnrollment from "../models/TrainingEnrollment.js";
+import TrainingEnrollment, { TRAINING_STATUSES } from "../models/TrainingEnrollment.js";
 import auth from "../middleware/auth.js";
-import validate, { trainingSchema } from "../middleware/validate.js";
+import validate, { trainingSchema, trainingStatusSchema } from "../middleware/validate.js";
 import asyncHandler from "../middleware/asyncHandler.js";
+import { buildFilter, parsePagination, parseSort, buildListResponse } from "../utils/pagination.js";
 
 const router = express.Router();
+const SORT_FIELDS = ["createdAt", "email", "status"];
 
 router.post(
   "/",
@@ -20,8 +22,31 @@ router.get(
   "/",
   auth,
   asyncHandler(async (req, res) => {
-    const enrollments = await TrainingEnrollment.find();
-    res.json(enrollments);
+    const filter = buildFilter(req, TRAINING_STATUSES);
+    const { page, limit, skip } = parsePagination(req);
+    const sort = parseSort(req, SORT_FIELDS);
+
+    const [data, total] = await Promise.all([
+      TrainingEnrollment.find(filter).sort(sort).skip(skip).limit(limit),
+      TrainingEnrollment.countDocuments(filter),
+    ]);
+
+    res.json(buildListResponse(data, total, page, limit));
+  })
+);
+
+router.patch(
+  "/:id/status",
+  auth,
+  validate(trainingStatusSchema),
+  asyncHandler(async (req, res) => {
+    const enrollment = await TrainingEnrollment.findByIdAndUpdate(
+      req.params.id,
+      { status: req.body.status },
+      { new: true }
+    );
+    if (!enrollment) return res.status(404).json({ error: "Training enrollment not found" });
+    res.json(enrollment);
   })
 );
 
@@ -29,7 +54,11 @@ router.delete(
   "/:id",
   auth,
   asyncHandler(async (req, res) => {
-    const deletedEnrollment = await TrainingEnrollment.findByIdAndDelete(req.params.id);
+    const deletedEnrollment = await TrainingEnrollment.findByIdAndUpdate(
+      req.params.id,
+      { deletedAt: new Date() },
+      { new: true }
+    );
     if (!deletedEnrollment) return res.status(404).json({ error: "Training enrollment not found" });
     res.json({ message: "Training enrollment deleted successfully!" });
   })
