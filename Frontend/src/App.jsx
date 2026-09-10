@@ -11,8 +11,14 @@ import MediaTraining from "./Pages/Services/MediaTraining.jsx";
 import SmediaNavbar from "./Components/SmediaNavbar.jsx";
 import Footer from "./Pages/Footer.jsx";
 import AdminDashboard from "./Pages/AdminDashboard.jsx";
+import Login from "./Pages/Login.jsx";
 import ScrollToTop from "./Components/ScrollToTop.jsx";
 import { Spinner } from "react-bootstrap";
+
+function ProtectedRoute({ children }) {
+  const token = localStorage.getItem("adminToken");
+  return token ? children : <Navigate to="/Login" replace />;
+}
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -55,7 +61,15 @@ function App() {
         <Route path="/MediaTraining" element={<MediaTraining />} />
         <Route path="/Projects" element={<Projects />} />
         <Route path="/Contact" element={<Contact />} />
-        <Route path="/Admin" element={<AdminDashboard />} />
+        <Route path="/Login" element={<Login />} />
+        <Route
+          path="/Admin"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
 
       <Footer />
