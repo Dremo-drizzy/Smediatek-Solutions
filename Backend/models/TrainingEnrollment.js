@@ -17,6 +17,9 @@ const TrainingSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+TrainingSchema.index({ email: 1 });
+TrainingSchema.index({ createdAt: -1 });
+TrainingSchema.index({ status: 1 });
 TrainingSchema.index({ fullName: "text", email: "text", phone: "text", focus: "text", goals: "text" });
 
 export default mongoose.model("TrainingEnrollment", TrainingSchema);

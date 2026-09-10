@@ -65,14 +65,35 @@ All request/response bodies are JSON. Routes marked "Admin (JWT)" require an `Au
 | GET | `/` | Public | Health check |
 | POST | `/api/auth/login` | Public | Admin login — verifies email/password, returns a 7-day JWT |
 | POST | `/api/contact` | Public | Submit a contact form message |
-| GET | `/api/contact` | Admin (JWT) | List all contact messages |
-| DELETE | `/api/contact/:id` | Admin (JWT) | Delete a contact message |
+| GET | `/api/contact` | Admin (JWT) | List contact messages — paginated, filterable, searchable (see below) |
+| PATCH | `/api/contact/:id/status` | Admin (JWT) | Update a contact message's status (`new`/`read`/`archived`) |
+| DELETE | `/api/contact/:id` | Admin (JWT) | Soft-delete a contact message (sets `deletedAt`) |
 | POST | `/api/brand` | Public | Submit a brand identity project request |
-| GET | `/api/brand` | Admin (JWT) | List all brand project requests |
-| DELETE | `/api/brand/:id` | Admin (JWT) | Delete a brand project request |
+| GET | `/api/brand` | Admin (JWT) | List brand project requests — paginated, filterable, searchable |
+| PATCH | `/api/brand/:id/status` | Admin (JWT) | Update a brand project's status (`new`/`in-progress`/`won`/`lost`) |
+| DELETE | `/api/brand/:id` | Admin (JWT) | Soft-delete a brand project request |
 | POST | `/api/livestream` | Public | Submit a livestreaming service request |
-| GET | `/api/livestream` | Admin (JWT) | List all livestreaming requests |
-| DELETE | `/api/livestream/:id` | Admin (JWT) | Delete a livestreaming request |
+| GET | `/api/livestream` | Admin (JWT) | List livestreaming requests — paginated, filterable, searchable |
+| PATCH | `/api/livestream/:id/status` | Admin (JWT) | Update a livestream request's status (`new`/`in-progress`/`won`/`lost`) |
+| DELETE | `/api/livestream/:id` | Admin (JWT) | Soft-delete a livestreaming request |
 | POST | `/api/training` | Public | Submit a media training enrollment |
-| GET | `/api/training` | Admin (JWT) | List all training enrollments |
-| DELETE | `/api/training/:id` | Admin (JWT) | Delete a training enrollment |
+| GET | `/api/training` | Admin (JWT) | List training enrollments — paginated, filterable, searchable |
+| PATCH | `/api/training/:id/status` | Admin (JWT) | Update a training enrollment's status (`pending`/`confirmed`/`completed`) |
+| DELETE | `/api/training/:id` | Admin (JWT) | Soft-delete a training enrollment |
+
+### GET list query parameters
+
+Every resource's GET list route accepts the same query params and returns `{ data, total, page, pages }` instead of a raw array:
+
+| Param | Effect |
+| --- | --- |
+| `page` | Page number, 1-indexed. Defaults to `1`. |
+| `limit` | Items per page. Defaults to `20`, capped at `100`. |
+| `status` | Filter to one status value from that resource's enum; ignored if not a valid value. |
+| `sort` | Field to sort by: `createdAt`, `email`, or `status`. Prefix with `-` for descending. Defaults to `-createdAt`. |
+| `search` | Full-text search across that resource's string fields via a MongoDB text index. |
+| `includeDeleted` | Set to `true` to include soft-deleted records (excluded by default). |
+
+### Database indexes
+
+Each schema indexes `email`, `createdAt`, and `status` individually, plus a compound text index over its string fields for `search`. These back the exact access patterns the admin dashboard uses at scale: listing by recency (`createdAt`), filtering by pipeline stage (`status`), looking up a lead by `email`, and free-text search — without indexes, each of those becomes a full collection scan as the data grows.
