@@ -28,7 +28,7 @@ function ContactSection() {
     setStatus("");
 
     try {
-      const res = await api.post("/api/contact", formData);
+      const res = await api.post("/contact", formData);
       setStatus(res.data.message || "✅ Message sent successfully!");
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {

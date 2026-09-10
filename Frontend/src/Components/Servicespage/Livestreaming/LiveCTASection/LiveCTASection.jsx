@@ -49,7 +49,7 @@ function LiveCTASection() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await axios.post(`${API}/api/livestream`, formData);
+      await axios.post(`${API}/api/v1/livestream`, formData);
       setAlert({
         show: true,
         variant: "success",

@@ -28,7 +28,7 @@ function TrainingCTA() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await axios.post(`${API}/api/training`, formData);
+      await axios.post(`${API}/api/v1/training`, formData);
       setAlert({ show: true, variant: "success", message: "✅ Enrollment submitted successfully!" });
       setFormData({ fullName: "", email: "", phone: "", focus: "", mode: "", goals: "" });
       setShow(false);

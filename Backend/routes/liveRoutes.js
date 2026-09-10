@@ -1,10 +1,12 @@
 import express from "express";
-import LivestreamRequest from "../models/LivestreamRequest.js";
+import LivestreamRequest, { LIVESTREAM_STATUSES } from "../models/LivestreamRequest.js";
 import auth from "../middleware/auth.js";
-import validate, { liveSchema } from "../middleware/validate.js";
+import validate, { liveSchema, liveStatusSchema } from "../middleware/validate.js";
 import asyncHandler from "../middleware/asyncHandler.js";
+import { buildFilter, parsePagination, parseSort, buildListResponse } from "../utils/pagination.js";
 
 const router = express.Router();
+const SORT_FIELDS = ["createdAt", "email", "status"];
 
 router.post(
   "/",
@@ -20,8 +22,31 @@ router.get(
   "/",
   auth,
   asyncHandler(async (req, res) => {
-    const requests = await LivestreamRequest.find();
-    res.json(requests);
+    const filter = buildFilter(req, LIVESTREAM_STATUSES);
+    const { page, limit, skip } = parsePagination(req);
+    const sort = parseSort(req, SORT_FIELDS);
+
+    const [data, total] = await Promise.all([
+      LivestreamRequest.find(filter).sort(sort).skip(skip).limit(limit),
+      LivestreamRequest.countDocuments(filter),
+    ]);
+
+    res.json(buildListResponse(data, total, page, limit));
+  })
+);
+
+router.patch(
+  "/:id/status",
+  auth,
+  validate(liveStatusSchema),
+  asyncHandler(async (req, res) => {
+    const request = await LivestreamRequest.findByIdAndUpdate(
+      req.params.id,
+      { status: req.body.status },
+      { new: true }
+    );
+    if (!request) return res.status(404).json({ error: "Livestream request not found" });
+    res.json(request);
   })
 );
 
@@ -29,7 +54,11 @@ router.delete(
   "/:id",
   auth,
   asyncHandler(async (req, res) => {
-    const deletedRequest = await LivestreamRequest.findByIdAndDelete(req.params.id);
+    const deletedRequest = await LivestreamRequest.findByIdAndUpdate(
+      req.params.id,
+      { deletedAt: new Date() },
+      { new: true }
+    );
     if (!deletedRequest) return res.status(404).json({ error: "Livestream request not found" });
     res.json({ message: "Livestream request deleted successfully!" });
   })
