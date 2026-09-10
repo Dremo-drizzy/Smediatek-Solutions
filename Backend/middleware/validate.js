@@ -1,4 +1,8 @@
 import { z } from "zod";
+import { CONTACT_STATUSES } from "../models/Contact.js";
+import { BRAND_STATUSES } from "../models/BrandProject.js";
+import { LIVESTREAM_STATUSES } from "../models/LivestreamRequest.js";
+import { TRAINING_STATUSES } from "../models/TrainingEnrollment.js";
 
 export const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
@@ -32,6 +36,11 @@ export const trainingSchema = z.object({
   mode: z.enum(["online", "onsite", "hybrid"]),
   goals: z.string().trim().max(2000).optional(),
 });
+
+export const contactStatusSchema = z.object({ status: z.enum(CONTACT_STATUSES) });
+export const brandStatusSchema = z.object({ status: z.enum(BRAND_STATUSES) });
+export const liveStatusSchema = z.object({ status: z.enum(LIVESTREAM_STATUSES) });
+export const trainingStatusSchema = z.object({ status: z.enum(TRAINING_STATUSES) });
 
 const validate = (schema) => (req, res, next) => {
   const result = schema.safeParse(req.body);
