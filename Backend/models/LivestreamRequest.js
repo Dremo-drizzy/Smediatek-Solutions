@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+export const LIVESTREAM_STATUSES = ["new", "in-progress", "won", "lost"];
+
 const LiveSchema = new mongoose.Schema({
   fullName: { type: String, required: true, trim: true },
   organization: { type: String, trim: true },
@@ -8,6 +10,7 @@ const LiveSchema = new mongoose.Schema({
   services: [{ type: String }],
   details: { type: String, trim: true },
   date: { type: Date, default: Date.now },
+  status: { type: String, enum: LIVESTREAM_STATUSES, default: LIVESTREAM_STATUSES[0] },
 });
 
 export default mongoose.model("LivestreamRequest", LiveSchema);

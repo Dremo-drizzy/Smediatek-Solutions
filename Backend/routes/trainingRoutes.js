@@ -1,7 +1,7 @@
 import express from "express";
 import TrainingEnrollment from "../models/TrainingEnrollment.js";
 import auth from "../middleware/auth.js";
-import validate, { trainingSchema } from "../middleware/validate.js";
+import validate, { trainingSchema, trainingStatusSchema } from "../middleware/validate.js";
 import asyncHandler from "../middleware/asyncHandler.js";
 
 const router = express.Router();
@@ -22,6 +22,21 @@ router.get(
   asyncHandler(async (req, res) => {
     const enrollments = await TrainingEnrollment.find();
     res.json(enrollments);
+  })
+);
+
+router.patch(
+  "/:id/status",
+  auth,
+  validate(trainingStatusSchema),
+  asyncHandler(async (req, res) => {
+    const enrollment = await TrainingEnrollment.findByIdAndUpdate(
+      req.params.id,
+      { status: req.body.status },
+      { new: true }
+    );
+    if (!enrollment) return res.status(404).json({ error: "Training enrollment not found" });
+    res.json(enrollment);
   })
 );
 

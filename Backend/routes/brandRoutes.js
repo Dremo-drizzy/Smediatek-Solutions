@@ -1,7 +1,7 @@
 import express from "express";
 import BrandProject from "../models/BrandProject.js";
 import auth from "../middleware/auth.js";
-import validate, { brandSchema } from "../middleware/validate.js";
+import validate, { brandSchema, brandStatusSchema } from "../middleware/validate.js";
 import asyncHandler from "../middleware/asyncHandler.js";
 
 const router = express.Router();
@@ -22,6 +22,21 @@ router.get(
   asyncHandler(async (req, res) => {
     const projects = await BrandProject.find();
     res.json(projects);
+  })
+);
+
+router.patch(
+  "/:id/status",
+  auth,
+  validate(brandStatusSchema),
+  asyncHandler(async (req, res) => {
+    const project = await BrandProject.findByIdAndUpdate(
+      req.params.id,
+      { status: req.body.status },
+      { new: true }
+    );
+    if (!project) return res.status(404).json({ error: "Brand project not found" });
+    res.json(project);
   })
 );
 
