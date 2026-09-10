@@ -1,6 +1,7 @@
 import React from "react";
 import { Spinner, Alert, Table, Button, Card, Row, Col } from "react-bootstrap";
 import usePaginatedResource from "../hooks/usePaginatedResource";
+import api from "../utils/api";
 
 const Pager = ({ page, pages, onPageChange }) => {
   if (pages <= 1) return null;
@@ -39,6 +40,36 @@ const handleDelete = async (resource, id) => {
   }
 };
 
+const handleExport = async (endpoint) => {
+  try {
+    const res = await api.get(`${endpoint}/export`, { responseType: "blob" });
+    const url = window.URL.createObjectURL(new Blob([res.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `${endpoint.slice(1)}-export.csv`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error(err);
+    alert("Failed to export CSV.");
+  }
+};
+
+const CardTitleWithExport = ({ className, icon, label, isAdmin, endpoint }) => (
+  <div className="d-flex justify-content-between align-items-center mb-3">
+    <Card.Title className={`${className} mb-0`}>
+      {icon} {label}
+    </Card.Title>
+    {isAdmin && (
+      <Button size="sm" variant="outline-primary" onClick={() => handleExport(endpoint)}>
+        Export CSV
+      </Button>
+    )}
+  </div>
+);
+
 const AdminMessages = () => {
   const isAdmin = localStorage.getItem("adminRole") === "admin";
   const contact = usePaginatedResource("/contact");
@@ -56,9 +87,13 @@ const AdminMessages = () => {
         <Col md={12} className="mb-4">
           <Card className="shadow-sm">
             <Card.Body>
-              <Card.Title className="fw-bold text-primary fs-4 mb-3">
-                📩 Contact Messages
-              </Card.Title>
+              <CardTitleWithExport
+                className="fw-bold text-primary fs-4"
+                icon="📩"
+                label="Contact Messages"
+                isAdmin={isAdmin}
+                endpoint="/contact"
+              />
               {contact.loading ? (
                 <div className="text-center py-3">
                   <Spinner animation="border" className="text-primary" />
@@ -117,9 +152,13 @@ const AdminMessages = () => {
         <Col md={12} className="mb-4">
           <Card className="shadow-sm">
             <Card.Body>
-              <Card.Title className="fw-bold text-success fs-4 mb-3">
-                🎨 Brand Identity Requests
-              </Card.Title>
+              <CardTitleWithExport
+                className="fw-bold text-success fs-4"
+                icon="🎨"
+                label="Brand Identity Requests"
+                isAdmin={isAdmin}
+                endpoint="/brand"
+              />
               {brand.loading ? (
                 <div className="text-center py-3">
                   <Spinner animation="border" className="text-primary" />
@@ -182,9 +221,13 @@ const AdminMessages = () => {
         <Col md={12} className="mb-4">
           <Card className="shadow-sm">
             <Card.Body>
-              <Card.Title className="fw-bold text-info fs-4 mb-3">
-                🎥 Livestreaming Requests
-              </Card.Title>
+              <CardTitleWithExport
+                className="fw-bold text-info fs-4"
+                icon="🎥"
+                label="Livestreaming Requests"
+                isAdmin={isAdmin}
+                endpoint="/livestream"
+              />
               {livestream.loading ? (
                 <div className="text-center py-3">
                   <Spinner animation="border" className="text-primary" />
@@ -247,9 +290,13 @@ const AdminMessages = () => {
         <Col md={12}>
           <Card className="shadow-sm">
             <Card.Body>
-              <Card.Title className="fw-bold text-warning fs-4 mb-3">
-                🎓 Media Training Enrollments
-              </Card.Title>
+              <CardTitleWithExport
+                className="fw-bold text-warning fs-4"
+                icon="🎓"
+                label="Media Training Enrollments"
+                isAdmin={isAdmin}
+                endpoint="/training"
+              />
               {training.loading ? (
                 <div className="text-center py-3">
                   <Spinner animation="border" className="text-primary" />
