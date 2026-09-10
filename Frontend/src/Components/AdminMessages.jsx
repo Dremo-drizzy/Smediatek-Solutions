@@ -40,6 +40,7 @@ const handleDelete = async (resource, id) => {
 };
 
 const AdminMessages = () => {
+  const isAdmin = localStorage.getItem("adminRole") === "admin";
   const contact = usePaginatedResource("/contact");
   const brand = usePaginatedResource("/brand");
   const livestream = usePaginatedResource("/livestream");
@@ -91,13 +92,15 @@ const AdminMessages = () => {
                               {new Date(msg.createdAt).toLocaleDateString()}
                             </td>
                             <td>
-                              <Button
-                                variant="danger"
-                                size="sm"
-                                onClick={() => handleDelete(contact, msg._id)}
-                              >
-                                Delete
-                              </Button>
+                              {isAdmin && (
+                                <Button
+                                  variant="danger"
+                                  size="sm"
+                                  onClick={() => handleDelete(contact, msg._id)}
+                                >
+                                  Delete
+                                </Button>
+                              )}
                             </td>
                           </tr>
                         ))}
@@ -154,13 +157,15 @@ const AdminMessages = () => {
                             <td style={{ maxWidth: "300px" }}>{p.description || "—"}</td>
                             <td>{new Date(p.date || p.createdAt).toLocaleDateString()}</td>
                             <td>
-                              <Button
-                                variant="danger"
-                                size="sm"
-                                onClick={() => handleDelete(brand, p._id)}
-                              >
-                                Delete
-                              </Button>
+                              {isAdmin && (
+                                <Button
+                                  variant="danger"
+                                  size="sm"
+                                  onClick={() => handleDelete(brand, p._id)}
+                                >
+                                  Delete
+                                </Button>
+                              )}
                             </td>
                           </tr>
                         ))}
@@ -217,13 +222,15 @@ const AdminMessages = () => {
                             <td style={{ maxWidth: "300px" }}>{r.details || "—"}</td>
                             <td>{new Date(r.date || r.createdAt).toLocaleDateString()}</td>
                             <td>
-                              <Button
-                                variant="danger"
-                                size="sm"
-                                onClick={() => handleDelete(livestream, r._id)}
-                              >
-                                Delete
-                              </Button>
+                              {isAdmin && (
+                                <Button
+                                  variant="danger"
+                                  size="sm"
+                                  onClick={() => handleDelete(livestream, r._id)}
+                                >
+                                  Delete
+                                </Button>
+                              )}
                             </td>
                           </tr>
                         ))}
@@ -280,13 +287,15 @@ const AdminMessages = () => {
                             <td style={{ maxWidth: "300px" }}>{t.goals || "—"}</td>
                             <td>{new Date(t.date || t.createdAt).toLocaleDateString()}</td>
                             <td>
-                              <Button
-                                variant="danger"
-                                size="sm"
-                                onClick={() => handleDelete(training, t._id)}
-                              >
-                                Delete
-                              </Button>
+                              {isAdmin && (
+                                <Button
+                                  variant="danger"
+                                  size="sm"
+                                  onClick={() => handleDelete(training, t._id)}
+                                >
+                                  Delete
+                                </Button>
+                              )}
                             </td>
                           </tr>
                         ))}

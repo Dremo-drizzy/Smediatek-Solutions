@@ -8,6 +8,8 @@ import ServiceHero from "../Components/Servicespage/ServiceHero";
 
 
 function AdminDashboard() {
+  const isAdmin = localStorage.getItem("adminRole") === "admin";
+
   return (
     <div>
       <ServiceHero
@@ -17,7 +19,7 @@ function AdminDashboard() {
         <h1 className="text-center mb-4 fw-bold text-primary">Admin Dashboard</h1>
         <AdminStatsChart />
         <AdminMessages />
-        <AdminPortfolioPanel />
+        {isAdmin && <AdminPortfolioPanel />}
       </Container>
     </div>
   );

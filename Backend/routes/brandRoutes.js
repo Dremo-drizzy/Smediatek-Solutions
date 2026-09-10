@@ -1,6 +1,6 @@
 import express from "express";
 import BrandProject, { BRAND_STATUSES } from "../models/BrandProject.js";
-import auth from "../middleware/auth.js";
+import auth, { requireRole } from "../middleware/auth.js";
 import validate, { brandSchema, brandStatusSchema } from "../middleware/validate.js";
 import asyncHandler from "../middleware/asyncHandler.js";
 import { buildFilter, parsePagination, parseSort, buildListResponse } from "../utils/pagination.js";
@@ -53,6 +53,7 @@ router.patch(
 router.delete(
   "/:id",
   auth,
+  requireRole("admin"),
   asyncHandler(async (req, res) => {
     const deletedProject = await BrandProject.findByIdAndUpdate(
       req.params.id,

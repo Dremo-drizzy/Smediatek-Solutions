@@ -1,6 +1,6 @@
 import express from "express";
 import PortfolioItem from "../models/PortfolioItem.js";
-import auth from "../middleware/auth.js";
+import auth, { requireRole } from "../middleware/auth.js";
 import validate, { portfolioSchema, portfolioUpdateSchema } from "../middleware/validate.js";
 import asyncHandler from "../middleware/asyncHandler.js";
 
@@ -17,6 +17,7 @@ router.get(
 router.post(
   "/",
   auth,
+  requireRole("admin"),
   validate(portfolioSchema),
   asyncHandler(async (req, res) => {
     const item = new PortfolioItem(req.body);
@@ -28,6 +29,7 @@ router.post(
 router.patch(
   "/:id",
   auth,
+  requireRole("admin"),
   validate(portfolioUpdateSchema),
   asyncHandler(async (req, res) => {
     const item = await PortfolioItem.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -39,6 +41,7 @@ router.patch(
 router.delete(
   "/:id",
   auth,
+  requireRole("admin"),
   asyncHandler(async (req, res) => {
     const item = await PortfolioItem.findByIdAndDelete(req.params.id);
     if (!item) return res.status(404).json({ message: "Portfolio item not found." });
