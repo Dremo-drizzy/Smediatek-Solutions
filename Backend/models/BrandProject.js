@@ -17,6 +17,9 @@ const BrandSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+BrandSchema.index({ email: 1 });
+BrandSchema.index({ createdAt: -1 });
+BrandSchema.index({ status: 1 });
 BrandSchema.index({ fullName: "text", businessName: "text", email: "text", brandType: "text", description: "text" });
 
 export default mongoose.model("BrandProject", BrandSchema);
