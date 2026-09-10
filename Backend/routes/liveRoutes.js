@@ -2,9 +2,10 @@
 import express from "express";
 import LivestreamRequest from "../models/LivestreamRequest.js";
 import auth from "../middleware/auth.js";
+import validate, { liveSchema } from "../middleware/validate.js";
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/", validate(liveSchema), async (req, res) => {
   try {
     const request = new LivestreamRequest(req.body);
     await request.save();

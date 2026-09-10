@@ -1,9 +1,10 @@
 import express from "express";
 import TrainingEnrollment from "../models/TrainingEnrollment.js";
 import auth from "../middleware/auth.js";
+import validate, { trainingSchema } from "../middleware/validate.js";
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/", validate(trainingSchema), async (req, res) => {
   try {
     const enrollment = new TrainingEnrollment(req.body);
     await enrollment.save();

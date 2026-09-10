@@ -2,10 +2,11 @@
 import express from "express";
 import BrandProject from "../models/BrandProject.js";
 import auth from "../middleware/auth.js";
+import validate, { brandSchema } from "../middleware/validate.js";
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/", validate(brandSchema), async (req, res) => {
   try {
     const newProject = new BrandProject(req.body);
     await newProject.save();
