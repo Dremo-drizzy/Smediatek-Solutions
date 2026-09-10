@@ -2,18 +2,26 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import helmet from "helmet";
 import contactRoutes from "./routes/contactRoutes.js";
 import brandRoutes from "./routes/brandRoutes.js";
 import liveRoutes from "./routes/liveRoutes.js";
 import trainingRoutes from "./routes/trainingRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import sanitizeRequest from "./middleware/sanitize.js";
+import { apiLimiter } from "./middleware/rateLimiters.js";
+import errorHandler from "./middleware/errorHandler.js";
 
 dotenv.config();
 
 const app = express();
 
 
-app.use(cors());
+app.use(helmet());
+app.use(cors({ origin: process.env.FRONTEND_URL }));
 app.use(express.json());
+app.use(sanitizeRequest);
+app.use("/api", apiLimiter);
 
 
 app.get("/", (req, res) => {
@@ -21,10 +29,13 @@ app.get("/", (req, res) => {
 });
 
 
+app.use("/api/auth", authRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/brand", brandRoutes);
 app.use("/api/livestream", liveRoutes);
 app.use("/api/training", trainingRoutes);
+
+app.use(errorHandler);
 
 
 const PORT = process.env.PORT || 5000;
