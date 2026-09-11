@@ -1,8 +1,10 @@
 import express from "express";
+import http from "http";
 import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import helmet from "helmet";
+import { initSocket } from "./socket.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import brandRoutes from "./routes/brandRoutes.js";
 import liveRoutes from "./routes/liveRoutes.js";
@@ -19,6 +21,8 @@ import errorHandler from "./middleware/errorHandler.js";
 dotenv.config();
 
 const app = express();
+const httpServer = http.createServer(app);
+initSocket(httpServer);
 
 
 app.use(helmet());
@@ -57,7 +61,7 @@ const startServer = async () => {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("✅ MongoDB Connected Successfully!");
 
-    app.listen(PORT, "0.0.0.0", () => {
+    httpServer.listen(PORT, "0.0.0.0", () => {
       console.log(`🚀 Server running on port ${PORT}`);
     });
 

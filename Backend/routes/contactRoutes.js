@@ -5,6 +5,8 @@ import validate, { contactSchema, contactStatusSchema } from "../middleware/vali
 import asyncHandler from "../middleware/asyncHandler.js";
 import { buildFilter, parsePagination, parseSort, buildListResponse } from "../utils/pagination.js";
 import { logAction } from "../utils/audit.js";
+import { notifyNewSubmission } from "../utils/notifyNewSubmission.js";
+import { emitNewLead } from "../socket.js";
 
 const router = express.Router();
 const SORT_FIELDS = ["createdAt", "email", "status"];
@@ -15,6 +17,16 @@ router.post(
   asyncHandler(async (req, res) => {
     const newContact = new Contact(req.body);
     await newContact.save();
+
+    notifyNewSubmission({
+      resourceLabel: "contact message",
+      submitterEmail: newContact.email,
+      submitterName: newContact.name,
+      fields: { Name: newContact.name, Email: newContact.email, Message: newContact.message },
+    });
+
+    emitNewLead("contact", newContact._id);
+
     res.status(201).json({ success: true, message: "Message sent successfully!" });
   })
 );

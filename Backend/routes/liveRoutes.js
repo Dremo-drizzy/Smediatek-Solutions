@@ -5,6 +5,8 @@ import validate, { liveSchema, liveStatusSchema } from "../middleware/validate.j
 import asyncHandler from "../middleware/asyncHandler.js";
 import { buildFilter, parsePagination, parseSort, buildListResponse } from "../utils/pagination.js";
 import { logAction } from "../utils/audit.js";
+import { notifyNewSubmission } from "../utils/notifyNewSubmission.js";
+import { emitNewLead } from "../socket.js";
 
 const router = express.Router();
 const SORT_FIELDS = ["createdAt", "email", "status"];
@@ -15,6 +17,23 @@ router.post(
   asyncHandler(async (req, res) => {
     const request = new LivestreamRequest(req.body);
     await request.save();
+
+    notifyNewSubmission({
+      resourceLabel: "livestream request",
+      submitterEmail: request.email,
+      submitterName: request.fullName,
+      fields: {
+        "Full Name": request.fullName,
+        Organization: request.organization,
+        Email: request.email,
+        "Event Type": request.eventType,
+        Services: request.services,
+        Details: request.details,
+      },
+    });
+
+    emitNewLead("livestream", request._id);
+
     res.status(201).json({ message: "Livestream request received!" });
   })
 );
