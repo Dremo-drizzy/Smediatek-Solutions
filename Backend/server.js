@@ -4,6 +4,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import helmet from "helmet";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./config/swagger.js";
 import { initSocket } from "./socket.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import brandRoutes from "./routes/brandRoutes.js";
@@ -46,6 +48,19 @@ app.use("/api/v1/stats", statsRoutes);
 app.use("/api/v1/portfolio", portfolioRoutes);
 app.use("/api/v1/audit", auditRoutes);
 app.use("/api/v1", exportRoutes);
+
+// Swagger UI renders inline <script>/<style> tags, which helmet's default
+// CSP (script-src/style-src 'self') blocks — drop the CSP header for just
+// this route rather than weakening it globally.
+app.use(
+  "/api/docs",
+  (req, res, next) => {
+    res.removeHeader("Content-Security-Policy");
+    next();
+  },
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec)
+);
 
 app.use(errorHandler);
 

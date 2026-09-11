@@ -11,6 +11,31 @@ import { emitNewLead } from "../socket.js";
 const router = express.Router();
 const SORT_FIELDS = ["createdAt", "email", "status"];
 
+/**
+ * @swagger
+ * /livestream:
+ *   post:
+ *     summary: Submit a livestreaming service request
+ *     tags: [Livestream]
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [fullName, email, eventType]
+ *             properties:
+ *               fullName: { type: string }
+ *               organization: { type: string }
+ *               email: { type: string, format: email }
+ *               eventType: { type: string }
+ *               services: { type: array, items: { type: string } }
+ *               details: { type: string }
+ *     responses:
+ *       201: { description: Request saved }
+ *       400: { description: Validation failed }
+ */
 router.post(
   "/",
   validate(liveSchema),
@@ -38,6 +63,24 @@ router.post(
   })
 );
 
+/**
+ * @swagger
+ * /livestream:
+ *   get:
+ *     summary: List livestreaming requests (paginated, filterable, searchable)
+ *     tags: [Livestream]
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - $ref: '#/components/parameters/PageParam'
+ *       - $ref: '#/components/parameters/LimitParam'
+ *       - $ref: '#/components/parameters/StatusParam'
+ *       - $ref: '#/components/parameters/SortParam'
+ *       - $ref: '#/components/parameters/SearchParam'
+ *       - $ref: '#/components/parameters/IncludeDeletedParam'
+ *     responses:
+ *       200: { description: "{ data, total, page, pages }" }
+ *       401: { $ref: '#/components/responses/Unauthorized' }
+ */
 router.get(
   "/",
   auth,
@@ -55,6 +98,29 @@ router.get(
   })
 );
 
+/**
+ * @swagger
+ * /livestream/{id}/status:
+ *   patch:
+ *     summary: Update a livestream request's status
+ *     tags: [Livestream]
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - { name: id, in: path, required: true, schema: { type: string } }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [status]
+ *             properties:
+ *               status: { type: string, enum: [new, in-progress, won, lost] }
+ *     responses:
+ *       200: { description: Updated document }
+ *       401: { $ref: '#/components/responses/Unauthorized' }
+ *       404: { $ref: '#/components/responses/NotFound' }
+ */
 router.patch(
   "/:id/status",
   auth,
@@ -71,6 +137,21 @@ router.patch(
   })
 );
 
+/**
+ * @swagger
+ * /livestream/{id}:
+ *   delete:
+ *     summary: Soft-delete a livestreaming request (admin role only)
+ *     tags: [Livestream]
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - { name: id, in: path, required: true, schema: { type: string } }
+ *     responses:
+ *       200: { description: Deleted (deletedAt set) }
+ *       401: { $ref: '#/components/responses/Unauthorized' }
+ *       403: { $ref: '#/components/responses/Forbidden' }
+ *       404: { $ref: '#/components/responses/NotFound' }
+ */
 router.delete(
   "/:id",
   auth,

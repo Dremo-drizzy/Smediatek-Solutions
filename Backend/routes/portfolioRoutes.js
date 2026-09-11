@@ -7,6 +7,16 @@ import { logAction } from "../utils/audit.js";
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /portfolio:
+ *   get:
+ *     summary: List portfolio items, sorted by order (public, unauthenticated)
+ *     tags: [Portfolio]
+ *     security: []
+ *     responses:
+ *       200: { description: Array of portfolio items }
+ */
 router.get(
   "/",
   asyncHandler(async (req, res) => {
@@ -15,6 +25,32 @@ router.get(
   })
 );
 
+/**
+ * @swagger
+ * /portfolio:
+ *   post:
+ *     summary: Add a portfolio item (admin role only)
+ *     tags: [Portfolio]
+ *     security: [{ bearerAuth: [] }]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [title, category, imageUrl]
+ *             properties:
+ *               title: { type: string }
+ *               category: { type: string }
+ *               imageUrl: { type: string }
+ *               description: { type: string }
+ *               order: { type: integer }
+ *     responses:
+ *       201: { description: Created item }
+ *       400: { description: Validation failed }
+ *       401: { $ref: '#/components/responses/Unauthorized' }
+ *       403: { $ref: '#/components/responses/Forbidden' }
+ */
 router.post(
   "/",
   auth,
@@ -28,6 +64,34 @@ router.post(
   })
 );
 
+/**
+ * @swagger
+ * /portfolio/{id}:
+ *   patch:
+ *     summary: Edit a portfolio item (admin role only)
+ *     tags: [Portfolio]
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - { name: id, in: path, required: true, schema: { type: string } }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: Any subset of title/category/imageUrl/description/order
+ *             properties:
+ *               title: { type: string }
+ *               category: { type: string }
+ *               imageUrl: { type: string }
+ *               description: { type: string }
+ *               order: { type: integer }
+ *     responses:
+ *       200: { description: Updated item }
+ *       401: { $ref: '#/components/responses/Unauthorized' }
+ *       403: { $ref: '#/components/responses/Forbidden' }
+ *       404: { $ref: '#/components/responses/NotFound' }
+ */
 router.patch(
   "/:id",
   auth,
@@ -41,6 +105,21 @@ router.patch(
   })
 );
 
+/**
+ * @swagger
+ * /portfolio/{id}:
+ *   delete:
+ *     summary: Delete a portfolio item (admin role only)
+ *     tags: [Portfolio]
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - { name: id, in: path, required: true, schema: { type: string } }
+ *     responses:
+ *       200: { description: Deleted }
+ *       401: { $ref: '#/components/responses/Unauthorized' }
+ *       403: { $ref: '#/components/responses/Forbidden' }
+ *       404: { $ref: '#/components/responses/NotFound' }
+ */
 router.delete(
   "/:id",
   auth,
