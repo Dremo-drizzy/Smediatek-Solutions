@@ -35,7 +35,7 @@ const usePaginatedResource = (endpoint, limit = 10) => {
     setTotal((prev) => Math.max(prev - 1, 0));
   };
 
-  return { items, page, setPage, pages, total, loading, error, remove };
+  return { items, page, setPage, pages, total, loading, error, remove, refetch: fetchPage };
 };
 
 export default usePaginatedResource;
