@@ -13,6 +13,36 @@ const RESET_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hour
 
 const hashToken = (token) => crypto.createHash("sha256").update(token).digest("hex");
 
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: Admin login
+ *     tags: [Auth]
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, password]
+ *             properties:
+ *               email: { type: string, format: email }
+ *               password: { type: string, format: password }
+ *     responses:
+ *       200:
+ *         description: JWT (7-day expiry) and the admin's role
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token: { type: string }
+ *                 role: { type: string, enum: [admin, staff] }
+ *       401: { description: Invalid email or password }
+ *       429: { description: Too many login attempts (5 per 15 min) }
+ */
 router.post(
   "/login",
   loginLimiter,
@@ -43,6 +73,27 @@ router.post(
   })
 );
 
+/**
+ * @swagger
+ * /auth/forgot-password:
+ *   post:
+ *     summary: Request a password reset link
+ *     description: Always returns the same generic message regardless of whether the email is registered, so it can't be used to enumerate admin accounts. The reset link is logged to the server console (no email provider wired up for this yet).
+ *     tags: [Auth]
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email]
+ *             properties:
+ *               email: { type: string, format: email }
+ *     responses:
+ *       200: { description: Generic confirmation message }
+ *       429: { description: Too many requests (5 per 15 min) }
+ */
 router.post(
   "/forgot-password",
   forgotPasswordLimiter,
@@ -67,6 +118,27 @@ router.post(
   })
 );
 
+/**
+ * @swagger
+ * /auth/reset-password:
+ *   post:
+ *     summary: Reset a password using a token from forgot-password
+ *     tags: [Auth]
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [token, newPassword]
+ *             properties:
+ *               token: { type: string, description: Raw token from the reset link }
+ *               newPassword: { type: string, format: password, minLength: 8 }
+ *     responses:
+ *       200: { description: Password reset successfully }
+ *       400: { description: Invalid or expired reset token, or validation error }
+ */
 router.post(
   "/reset-password",
   validate(resetPasswordSchema),

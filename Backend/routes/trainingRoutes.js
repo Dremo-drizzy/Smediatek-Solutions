@@ -11,6 +11,31 @@ import { emitNewLead } from "../socket.js";
 const router = express.Router();
 const SORT_FIELDS = ["createdAt", "email", "status"];
 
+/**
+ * @swagger
+ * /training:
+ *   post:
+ *     summary: Submit a media training enrollment
+ *     tags: [Training]
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [fullName, email, phone, focus, mode]
+ *             properties:
+ *               fullName: { type: string }
+ *               email: { type: string, format: email }
+ *               phone: { type: string }
+ *               focus: { type: string }
+ *               mode: { type: string, enum: [online, onsite, hybrid] }
+ *               goals: { type: string }
+ *     responses:
+ *       201: { description: Enrollment saved }
+ *       400: { description: Validation failed }
+ */
 router.post(
   "/",
   validate(trainingSchema),
@@ -38,6 +63,24 @@ router.post(
   })
 );
 
+/**
+ * @swagger
+ * /training:
+ *   get:
+ *     summary: List training enrollments (paginated, filterable, searchable)
+ *     tags: [Training]
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - $ref: '#/components/parameters/PageParam'
+ *       - $ref: '#/components/parameters/LimitParam'
+ *       - $ref: '#/components/parameters/StatusParam'
+ *       - $ref: '#/components/parameters/SortParam'
+ *       - $ref: '#/components/parameters/SearchParam'
+ *       - $ref: '#/components/parameters/IncludeDeletedParam'
+ *     responses:
+ *       200: { description: "{ data, total, page, pages }" }
+ *       401: { $ref: '#/components/responses/Unauthorized' }
+ */
 router.get(
   "/",
   auth,
@@ -55,6 +98,29 @@ router.get(
   })
 );
 
+/**
+ * @swagger
+ * /training/{id}/status:
+ *   patch:
+ *     summary: Update a training enrollment's status
+ *     tags: [Training]
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - { name: id, in: path, required: true, schema: { type: string } }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [status]
+ *             properties:
+ *               status: { type: string, enum: [pending, confirmed, completed] }
+ *     responses:
+ *       200: { description: Updated document }
+ *       401: { $ref: '#/components/responses/Unauthorized' }
+ *       404: { $ref: '#/components/responses/NotFound' }
+ */
 router.patch(
   "/:id/status",
   auth,
@@ -71,6 +137,21 @@ router.patch(
   })
 );
 
+/**
+ * @swagger
+ * /training/{id}:
+ *   delete:
+ *     summary: Soft-delete a training enrollment (admin role only)
+ *     tags: [Training]
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - { name: id, in: path, required: true, schema: { type: string } }
+ *     responses:
+ *       200: { description: Deleted (deletedAt set) }
+ *       401: { $ref: '#/components/responses/Unauthorized' }
+ *       403: { $ref: '#/components/responses/Forbidden' }
+ *       404: { $ref: '#/components/responses/NotFound' }
+ */
 router.delete(
   "/:id",
   auth,

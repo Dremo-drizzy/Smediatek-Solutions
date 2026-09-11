@@ -46,6 +46,32 @@ const escapeCsvField = (value) => {
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /{resource}/export:
+ *   get:
+ *     summary: Stream the current filtered result set as CSV (admin role only)
+ *     description: Honors status/search/includeDeleted like the list endpoints, but returns the full matching set — no pagination.
+ *     tags: [Export]
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - name: resource
+ *         in: path
+ *         required: true
+ *         schema: { type: string, enum: [contact, brand, livestream, training] }
+ *       - $ref: '#/components/parameters/StatusParam'
+ *       - $ref: '#/components/parameters/SearchParam'
+ *       - $ref: '#/components/parameters/IncludeDeletedParam'
+ *     responses:
+ *       200:
+ *         description: CSV file
+ *         content:
+ *           text/csv:
+ *             schema: { type: string }
+ *       401: { $ref: '#/components/responses/Unauthorized' }
+ *       403: { $ref: '#/components/responses/Forbidden' }
+ *       404: { description: Unknown resource name }
+ */
 router.get(
   "/:resource/export",
   auth,
