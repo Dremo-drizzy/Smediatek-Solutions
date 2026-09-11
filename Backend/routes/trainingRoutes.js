@@ -5,6 +5,8 @@ import validate, { trainingSchema, trainingStatusSchema } from "../middleware/va
 import asyncHandler from "../middleware/asyncHandler.js";
 import { buildFilter, parsePagination, parseSort, buildListResponse } from "../utils/pagination.js";
 import { logAction } from "../utils/audit.js";
+import { notifyNewSubmission } from "../utils/notifyNewSubmission.js";
+import { emitNewLead } from "../socket.js";
 
 const router = express.Router();
 const SORT_FIELDS = ["createdAt", "email", "status"];
@@ -15,6 +17,23 @@ router.post(
   asyncHandler(async (req, res) => {
     const enrollment = new TrainingEnrollment(req.body);
     await enrollment.save();
+
+    notifyNewSubmission({
+      resourceLabel: "training enrollment",
+      submitterEmail: enrollment.email,
+      submitterName: enrollment.fullName,
+      fields: {
+        "Full Name": enrollment.fullName,
+        Email: enrollment.email,
+        Phone: enrollment.phone,
+        Focus: enrollment.focus,
+        Mode: enrollment.mode,
+        Goals: enrollment.goals,
+      },
+    });
+
+    emitNewLead("training", enrollment._id);
+
     res.status(201).json({ message: "Training enrollment submitted!" });
   })
 );

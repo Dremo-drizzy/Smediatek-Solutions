@@ -5,6 +5,8 @@ import validate, { brandSchema, brandStatusSchema } from "../middleware/validate
 import asyncHandler from "../middleware/asyncHandler.js";
 import { buildFilter, parsePagination, parseSort, buildListResponse } from "../utils/pagination.js";
 import { logAction } from "../utils/audit.js";
+import { notifyNewSubmission } from "../utils/notifyNewSubmission.js";
+import { emitNewLead } from "../socket.js";
 
 const router = express.Router();
 const SORT_FIELDS = ["createdAt", "email", "status"];
@@ -15,6 +17,23 @@ router.post(
   asyncHandler(async (req, res) => {
     const newProject = new BrandProject(req.body);
     await newProject.save();
+
+    notifyNewSubmission({
+      resourceLabel: "brand identity request",
+      submitterEmail: newProject.email,
+      submitterName: newProject.fullName,
+      fields: {
+        "Full Name": newProject.fullName,
+        "Business Name": newProject.businessName,
+        Email: newProject.email,
+        "Brand Type": newProject.brandType,
+        Services: newProject.services,
+        Description: newProject.description,
+      },
+    });
+
+    emitNewLead("brand", newProject._id);
+
     res.status(201).json({ message: "Brand project submitted successfully!" });
   })
 );
