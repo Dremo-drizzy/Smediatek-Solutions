@@ -7,6 +7,7 @@ import helmet from "helmet";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger.js";
 import { initSocket } from "./socket.js";
+import { scheduleWeeklyDigest } from "./jobs/weeklyDigest.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import brandRoutes from "./routes/brandRoutes.js";
 import liveRoutes from "./routes/liveRoutes.js";
@@ -75,6 +76,8 @@ const startServer = async () => {
 
     await mongoose.connect(process.env.MONGO_URI);
     console.log("✅ MongoDB Connected Successfully!");
+
+    scheduleWeeklyDigest();
 
     httpServer.listen(PORT, "0.0.0.0", () => {
       console.log(`🚀 Server running on port ${PORT}`);
