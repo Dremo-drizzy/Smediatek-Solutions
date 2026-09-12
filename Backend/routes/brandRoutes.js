@@ -3,10 +3,25 @@ import BrandProject, { BRAND_STATUSES } from "../models/BrandProject.js";
 import auth, { requireRole } from "../middleware/auth.js";
 import validate, { brandSchema, brandStatusSchema } from "../middleware/validate.js";
 import asyncHandler from "../middleware/asyncHandler.js";
+import upload from "../middleware/upload.js";
 import { buildFilter, parsePagination, parseSort, buildListResponse } from "../utils/pagination.js";
 import { logAction } from "../utils/audit.js";
 import { notifyNewSubmission } from "../utils/notifyNewSubmission.js";
 import { emitNewLead } from "../socket.js";
+import { uploadImages } from "../utils/uploadImages.js";
+
+// The form sends "services" as a JSON-encoded string alongside the image
+// files, since a multipart field can't carry a JS array directly.
+const parseServicesField = (req, res, next) => {
+  if (typeof req.body.services === "string") {
+    try {
+      req.body.services = JSON.parse(req.body.services);
+    } catch {
+      req.body.services = [req.body.services];
+    }
+  }
+  next();
+};
 
 const router = express.Router();
 const SORT_FIELDS = ["createdAt", "email", "status"];
@@ -15,13 +30,13 @@ const SORT_FIELDS = ["createdAt", "email", "status"];
  * @swagger
  * /brand:
  *   post:
- *     summary: Submit a brand identity project request
+ *     summary: Submit a brand identity project request, with up to 3 reference images
  *     tags: [Brand]
  *     security: []
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required: [fullName, businessName, email, brandType]
@@ -30,17 +45,24 @@ const SORT_FIELDS = ["createdAt", "email", "status"];
  *               businessName: { type: string }
  *               email: { type: string, format: email }
  *               brandType: { type: string }
- *               services: { type: array, items: { type: string } }
+ *               services: { type: string, description: "JSON-encoded array of strings" }
  *               description: { type: string }
+ *               images:
+ *                 type: array
+ *                 items: { type: string, format: binary }
+ *                 maxItems: 3
  *     responses:
  *       201: { description: Request saved }
- *       400: { description: Validation failed }
+ *       400: { description: Validation failed, or image rejected (wrong type / too large / too many) }
  */
 router.post(
   "/",
+  upload.array("images", 3),
+  parseServicesField,
   validate(brandSchema),
   asyncHandler(async (req, res) => {
-    const newProject = new BrandProject(req.body);
+    const images = await uploadImages(req.files);
+    const newProject = new BrandProject({ ...req.body, images });
     await newProject.save();
 
     notifyNewSubmission({
@@ -54,6 +76,7 @@ router.post(
         "Brand Type": newProject.brandType,
         Services: newProject.services,
         Description: newProject.description,
+        Images: newProject.images,
       },
     });
 

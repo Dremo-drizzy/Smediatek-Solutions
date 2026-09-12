@@ -14,6 +14,10 @@ const errorHandler = (err, req, res, next) => {
     return res.status(409).json({ message: "A record with this value already exists." });
   }
 
+  if (err.name === "MulterError") {
+    return res.status(400).json({ message: err.message });
+  }
+
   res.status(err.status || 500).json({ message: err.message || "Something went wrong." });
 };
 
