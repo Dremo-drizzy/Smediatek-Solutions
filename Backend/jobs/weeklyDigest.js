@@ -26,11 +26,16 @@ export const runWeeklyDigest = async () => {
   await sendMail({ to: process.env.ADMIN_EMAIL, ...weeklyDigestEmail(counts) });
 };
 
-// Every Monday at 8am, server local time.
+// Every Monday at 8am Atlantic time. Explicit timezone because the host
+// (Render) runs its containers in UTC, not the admin's local time.
 export const scheduleWeeklyDigest = () => {
-  cron.schedule("0 8 * * 1", () => {
-    runWeeklyDigest().catch((error) => {
-      console.error("❌ Failed to send weekly digest:", error.message);
-    });
-  });
+  cron.schedule(
+    "0 8 * * 1",
+    () => {
+      runWeeklyDigest().catch((error) => {
+        console.error("❌ Failed to send weekly digest:", error.message);
+      });
+    },
+    { timezone: "America/Halifax" }
+  );
 };
