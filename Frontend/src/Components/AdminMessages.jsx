@@ -204,6 +204,7 @@ const AdminMessages = () => {
                           <th>Brand Type</th>
                           <th>Services</th>
                           <th>Description</th>
+                          <th>Images</th>
                           <th>Date</th>
                           <th>Action</th>
                         </tr>
@@ -218,6 +219,23 @@ const AdminMessages = () => {
                             <td>{p.brandType}</td>
                             <td style={{ maxWidth: "200px" }}>{p.services ? p.services.join(", ") : "None"}</td>
                             <td style={{ maxWidth: "300px" }}>{p.description || "—"}</td>
+                            <td>
+                              {p.images && p.images.length > 0 ? (
+                                <div className="d-flex gap-1">
+                                  {p.images.map((url, i) => (
+                                    <a key={url} href={url} target="_blank" rel="noopener noreferrer">
+                                      <img
+                                        src={url}
+                                        alt={`Reference ${i + 1}`}
+                                        style={{ width: 40, height: 40, objectFit: "cover", borderRadius: 4 }}
+                                      />
+                                    </a>
+                                  ))}
+                                </div>
+                              ) : (
+                                "—"
+                              )}
+                            </td>
                             <td>{new Date(p.date || p.createdAt).toLocaleDateString()}</td>
                             <td>
                               {isAdmin && (
