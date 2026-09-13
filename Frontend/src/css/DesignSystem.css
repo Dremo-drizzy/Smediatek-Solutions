@@ -1,21 +1,24 @@
 :root {
-  --primary-color: #0A74E6;
-  --secondary-color: #FF6600;
-  --accent-color: #FF8533;
-
-  --background-color: #FFFFFF;
-  --surface-color: #F8F9FA;
-  --on-surface-color: #000000;
-  --on-primary-color: #FFFFFF;
-  --on-secondary-color: #FFFFFF;
-
-  --border-color: #DEE2E6;
+  --color-bg: #0A0E17;
+  --color-surface: rgba(255,255,255,0.04);
+  --color-surface-border: rgba(255,255,255,0.12);
+  --color-ink: #F1F3F8;
+  --color-ink-soft: #AEB7C6;
+  --color-ink-faint: #9CA6B8;
+  --color-primary: #4F5BFF;
+  --color-primary-soft: rgba(79,91,255,0.18);
+  --color-secondary: #FF7A29;
+  --color-secondary-soft: rgba(255,122,41,0.18);
+  --color-success: #1F9D66;
+  --color-danger: #D64545;
 }
 
 :root {
   --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  
+  --font-heading: "Space Grotesk", var(--font-family-sans-serif);
+  --font-body: "Manrope", var(--font-family-sans-serif);
+
   --font-size-base: 1rem;
   --font-size-lg: 1.25rem;
   --font-size-sm: .875rem;
@@ -40,23 +43,36 @@
 
 :root {
   --border-radius: 0.25rem;
+  --radius-lg: 18px;
+  --radius-pill: 999px;
   --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
   --box-shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 }
 
+/* ============ Base ============ */
+
+html {
+  background: var(--color-bg);
+}
+
 body {
-  font-family: var(--font-family-sans-serif);
+  font-family: var(--font-body);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-normal);
   line-height: var(--line-height-base);
-  color: var(--on-surface-color);
-  background-color: var(--background-color);
+  color: var(--color-ink);
+  background-color: var(--color-bg);
+}
+
+h1, h2, h3 {
+  font-family: var(--font-heading);
 }
 
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
   margin-bottom: 0.5rem;
   font-weight: var(--font-weight-bold);
+  color: var(--color-ink);
 }
 
 h1 { font-size: var(--font-size-xxl); }
@@ -66,13 +82,271 @@ h3 { font-size: var(--font-size-lg); }
 p {
   margin-top: 0;
   margin-bottom: 1rem;
+  color: var(--color-ink-soft);
 }
 
 a {
-  color: var(--primary-color);
+  color: var(--color-primary);
   text-decoration: none;
 }
 
 a:hover {
   text-decoration: underline;
+}
+
+.navbar-brand,
+.btn {
+  font-family: var(--font-heading);
+}
+
+/* ============ Site-wide animated gradient-mesh background ============ */
+
+.bg-blobs {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bg-blob {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  filter: blur(65px);
+  opacity: 0.35;
+  will-change: transform;
+}
+
+.bg-blob-1 {
+  top: -12%;
+  left: -12%;
+  background: var(--color-primary);
+}
+
+.bg-blob-2 {
+  bottom: -18%;
+  right: -12%;
+  background: var(--color-primary);
+}
+
+.bg-blob-3 {
+  top: 38%;
+  right: 15%;
+  background: var(--color-secondary);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .bg-blob-1 { animation: blobDriftA 16s ease-in-out infinite alternate; }
+  .bg-blob-2 { animation: blobDriftB 18s ease-in-out infinite alternate; }
+  .bg-blob-3 { animation: blobDriftC 14s ease-in-out infinite alternate; }
+}
+
+@keyframes blobDriftA {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(70px, 50px) scale(1.15); }
+}
+
+@keyframes blobDriftB {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-60px, -40px) scale(1.1); }
+}
+
+@keyframes blobDriftC {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-45px, 55px) scale(0.9); }
+}
+
+/* Smaller, static on narrow screens: cheaper to paint, nothing to distract on a small viewport */
+@media (max-width: 480px) {
+  .bg-blob {
+    width: 320px;
+    height: 320px;
+    filter: blur(40px);
+    opacity: 0.22;
+  }
+
+  .bg-blob-1,
+  .bg-blob-2,
+  .bg-blob-3 {
+    animation: none !important;
+  }
+}
+
+/* ============ Reusable UI primitives ============ */
+
+.pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  border: 1px solid var(--color-surface-border);
+  color: var(--color-ink-soft);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-secondary);
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pulse-dot {
+    animation: pulseDot 1.8s ease-in-out infinite;
+  }
+}
+
+@keyframes pulseDot {
+  0%, 100% { box-shadow: 0 0 0 0 var(--color-secondary-soft); opacity: 1; }
+  50% { box-shadow: 0 0 0 6px transparent; opacity: 0.7; }
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, var(--color-secondary), #FFC08A);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--color-secondary);
+}
+
+/* ============ Buttons ============ */
+
+.btn {
+  font-weight: 600;
+}
+
+.btn-primary {
+  background-color: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: var(--color-bg);
+  border-radius: var(--radius-pill);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-check:focus + .btn-primary,
+.btn-primary:not(:disabled):not(.disabled):active {
+  background-color: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: var(--color-bg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .btn-primary:hover,
+  .btn-primary:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px var(--color-secondary-soft);
+  }
+}
+
+.btn-outline-light,
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: var(--color-ink);
+  border-radius: var(--radius-pill);
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.btn-outline-light:hover,
+.btn-outline-light:focus,
+.btn-ghost:hover,
+.btn-ghost:focus {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+}
+
+/* ============ Cards (Bootstrap Card, used site-wide) ============ */
+
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-surface-border);
+  color: var(--color-ink);
+  border-radius: var(--radius-lg);
+}
+
+.card-title {
+  color: var(--color-ink);
+}
+
+.card-text {
+  color: var(--color-ink-soft);
+}
+
+/* Opt-in 3D hover-tilt, used by marketing cards (not admin/data tables) */
+.glass-card {
+  transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .glass-card:hover {
+    transform: perspective(900px) rotateX(4deg) rotateY(-6deg) translateY(-6px);
+    border-color: var(--color-secondary);
+    box-shadow: 0 24px 60px -12px var(--color-primary-soft);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-card:hover {
+    border-color: var(--color-secondary);
+  }
+}
+
+/* ============ Forms ============ */
+
+.form-label {
+  color: var(--color-ink-soft);
+  font-weight: 600;
+}
+
+.form-control,
+.form-select {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-surface-border);
+  color: var(--color-ink);
+}
+
+.form-control::placeholder {
+  color: var(--color-ink-faint);
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--color-surface);
+  border-color: var(--color-primary);
+  color: var(--color-ink);
+  box-shadow: 0 0 0 0.2rem var(--color-primary-soft);
+}
+
+.form-check-input {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-surface-border);
+}
+
+.form-check-label {
+  color: var(--color-ink-soft);
+}
+
+/* ============ Tables (admin dashboard) ============ */
+
+.table {
+  color: var(--color-ink);
+  --bs-table-bg: transparent;
+  --bs-table-striped-bg: rgba(255, 255, 255, 0.03);
+  --bs-table-hover-bg: rgba(255, 255, 255, 0.06);
+  --bs-table-border-color: var(--color-surface-border);
+}
+
+.table > :not(caption) > * > * {
+  color: var(--color-ink);
 }
