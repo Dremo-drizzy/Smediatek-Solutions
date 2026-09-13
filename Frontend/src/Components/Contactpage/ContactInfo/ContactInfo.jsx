@@ -62,7 +62,7 @@ function ContactInfo() {
             data-aos="fade-up"
             data-aos-delay={contact.delay}
           >
-            <Card className="contact-card text-center w-100 h-100 p-3">
+            <Card className="contact-card glass-card text-center w-100 h-100 p-3">
               <div className="contact-icon mx-auto mb-3">
                 <i className={`bi ${contact.icon}`}></i>
               </div>

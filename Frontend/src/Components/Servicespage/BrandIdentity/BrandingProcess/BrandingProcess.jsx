@@ -52,7 +52,7 @@ function BrandingProcess() {
             data-aos="fade-up"
             data-aos-delay={item.delay}
           >
-            <Card className="p-4 h-100 border-0 brand-card">
+            <Card className="p-4 h-100 border-0 brand-card glass-card">
               <Card.Title className="fw-bold fs-5 mb-2">
                 {item.step} {item.title}
               </Card.Title>

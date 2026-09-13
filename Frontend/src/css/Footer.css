@@ -4,9 +4,9 @@
   text-align: start;
   padding-bottom: var(--spacing-sm);
   text-decoration: none !important;
-  color: var(--on-primary-color);
+  color: var(--color-ink-soft);
   transition: color 0.4s ease-in-out !important;
-  font-family: var(--font-family-sans-serif);
+  font-family: var(--font-body);
   outline: none !important;
   box-shadow: none !important;
 }
@@ -20,7 +20,7 @@
 }
 
 .Footer-link:hover {
-  color: blue !important;
+  color: var(--color-secondary) !important;
 }
 
 .Footer-nav {
@@ -31,19 +31,27 @@
   box-shadow: none !important;
 }
 .footer-h2{
-   background: linear-gradient(45deg, #0633f9, #50308d, #704ecd, #08176a);
+   background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
     background-size: 300% 300%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: 2rem;
-    animation: gradientShift 4s ease-in-out infinite;
     outline: none;
 }
-.Footer {
-  background-color: var(--on-surface-color);
-  color: var(--on-primary-color);
+
+@media (prefers-reduced-motion: no-preference) {
+  .footer-h2 {
+    animation: gradientShift 4s ease-in-out infinite;
+  }
 }
 
-.footer-h2 {
-  color: var(--primary-color);
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.Footer {
+  background-color: var(--color-bg);
+  color: var(--color-ink-soft);
+  border-top: 1px solid var(--color-surface-border);
 }
