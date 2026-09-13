@@ -12,20 +12,10 @@ function Home() {
     <div className="homepage-wrapper">
       <Hero />
       <Marquee />
-
-      <div className="mid-white">
-        <Growth />
-      </div>
-
+      <Growth />
       <ImpactHighlights />
-
-      <div className="parallax-bg">
-        <OurServices />
-      </div>
-
+      <OurServices />
       <WhySmediaTek />
-      
-
       <CTA />
     </div>
   );
