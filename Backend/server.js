@@ -1,8 +1,13 @@
 import express from "express";
+import http from "http";
 import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import helmet from "helmet";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./config/swagger.js";
+import { initSocket } from "./socket.js";
+import { scheduleWeeklyDigest } from "./jobs/weeklyDigest.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import brandRoutes from "./routes/brandRoutes.js";
 import liveRoutes from "./routes/liveRoutes.js";
@@ -19,6 +24,8 @@ import errorHandler from "./middleware/errorHandler.js";
 dotenv.config();
 
 const app = express();
+const httpServer = http.createServer(app);
+initSocket(httpServer);
 
 
 app.use(helmet());
@@ -43,6 +50,19 @@ app.use("/api/v1/portfolio", portfolioRoutes);
 app.use("/api/v1/audit", auditRoutes);
 app.use("/api/v1", exportRoutes);
 
+// Swagger UI renders inline <script>/<style> tags, which helmet's default
+// CSP (script-src/style-src 'self') blocks — drop the CSP header for just
+// this route rather than weakening it globally.
+app.use(
+  "/api/docs",
+  (req, res, next) => {
+    res.removeHeader("Content-Security-Policy");
+    next();
+  },
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec)
+);
+
 app.use(errorHandler);
 
 
@@ -57,7 +77,9 @@ const startServer = async () => {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("✅ MongoDB Connected Successfully!");
 
-    app.listen(PORT, "0.0.0.0", () => {
+    scheduleWeeklyDigest();
+
+    httpServer.listen(PORT, "0.0.0.0", () => {
       console.log(`🚀 Server running on port ${PORT}`);
     });
 

@@ -1,7 +1,15 @@
-import React from "react";
-import { Spinner, Alert, Table, Button, Card, Row, Col } from "react-bootstrap";
+import React, { useState } from "react";
+import { Spinner, Alert, Table, Button, Card, Row, Col, Toast, ToastContainer } from "react-bootstrap";
 import usePaginatedResource from "../hooks/usePaginatedResource";
+import useLeadSocket from "../hooks/useLeadSocket";
 import api from "../utils/api";
+
+const RESOURCE_LABELS = {
+  contact: "contact message",
+  brand: "brand identity request",
+  livestream: "livestream request",
+  training: "training enrollment",
+};
 
 const Pager = ({ page, pages, onPageChange }) => {
   if (pages <= 1) return null;
@@ -76,9 +84,25 @@ const AdminMessages = () => {
   const brand = usePaginatedResource("/brand");
   const livestream = usePaginatedResource("/livestream");
   const training = usePaginatedResource("/training");
+  const [toastMessage, setToastMessage] = useState("");
+
+  useLeadSocket((resource) => {
+    const resourceHooks = { contact, brand, livestream, training };
+    resourceHooks[resource]?.refetch();
+    setToastMessage(`New ${RESOURCE_LABELS[resource] || resource} received!`);
+  });
 
   return (
     <div className="container py-4">
+      <ToastContainer position="top-end" className="p-3" style={{ zIndex: 1060 }}>
+        <Toast onClose={() => setToastMessage("")} show={!!toastMessage} delay={6000} autohide bg="primary">
+          <Toast.Header>
+            <strong className="me-auto">🔔 New Lead</strong>
+          </Toast.Header>
+          <Toast.Body className="text-white">{toastMessage}</Toast.Body>
+        </Toast>
+      </ToastContainer>
+
       <h2 className="fw-bold text-primary mb-4 text-center">
         🧭 Admin Dashboard — Messages Overview
       </h2>
@@ -180,6 +204,7 @@ const AdminMessages = () => {
                           <th>Brand Type</th>
                           <th>Services</th>
                           <th>Description</th>
+                          <th>Images</th>
                           <th>Date</th>
                           <th>Action</th>
                         </tr>
@@ -194,6 +219,23 @@ const AdminMessages = () => {
                             <td>{p.brandType}</td>
                             <td style={{ maxWidth: "200px" }}>{p.services ? p.services.join(", ") : "None"}</td>
                             <td style={{ maxWidth: "300px" }}>{p.description || "—"}</td>
+                            <td>
+                              {p.images && p.images.length > 0 ? (
+                                <div className="d-flex gap-1">
+                                  {p.images.map((url, i) => (
+                                    <a key={url} href={url} target="_blank" rel="noopener noreferrer">
+                                      <img
+                                        src={url}
+                                        alt={`Reference ${i + 1}`}
+                                        style={{ width: 40, height: 40, objectFit: "cover", borderRadius: 4 }}
+                                      />
+                                    </a>
+                                  ))}
+                                </div>
+                              ) : (
+                                "—"
+                              )}
+                            </td>
                             <td>{new Date(p.date || p.createdAt).toLocaleDateString()}</td>
                             <td>
                               {isAdmin && (

@@ -3,22 +3,107 @@ import BrandProject, { BRAND_STATUSES } from "../models/BrandProject.js";
 import auth, { requireRole } from "../middleware/auth.js";
 import validate, { brandSchema, brandStatusSchema } from "../middleware/validate.js";
 import asyncHandler from "../middleware/asyncHandler.js";
+import upload from "../middleware/upload.js";
 import { buildFilter, parsePagination, parseSort, buildListResponse } from "../utils/pagination.js";
 import { logAction } from "../utils/audit.js";
+import { notifyNewSubmission } from "../utils/notifyNewSubmission.js";
+import { emitNewLead } from "../socket.js";
+import { uploadImages } from "../utils/uploadImages.js";
+
+// The form sends "services" as a JSON-encoded string alongside the image
+// files, since a multipart field can't carry a JS array directly.
+const parseServicesField = (req, res, next) => {
+  if (typeof req.body.services === "string") {
+    try {
+      req.body.services = JSON.parse(req.body.services);
+    } catch {
+      req.body.services = [req.body.services];
+    }
+  }
+  next();
+};
 
 const router = express.Router();
 const SORT_FIELDS = ["createdAt", "email", "status"];
 
+/**
+ * @swagger
+ * /brand:
+ *   post:
+ *     summary: Submit a brand identity project request, with up to 3 reference images
+ *     tags: [Brand]
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required: [fullName, businessName, email, brandType]
+ *             properties:
+ *               fullName: { type: string }
+ *               businessName: { type: string }
+ *               email: { type: string, format: email }
+ *               brandType: { type: string }
+ *               services: { type: string, description: "JSON-encoded array of strings" }
+ *               description: { type: string }
+ *               images:
+ *                 type: array
+ *                 items: { type: string, format: binary }
+ *                 maxItems: 3
+ *     responses:
+ *       201: { description: Request saved }
+ *       400: { description: Validation failed, or image rejected (wrong type / too large / too many) }
+ */
 router.post(
   "/",
+  upload.array("images", 3),
+  parseServicesField,
   validate(brandSchema),
   asyncHandler(async (req, res) => {
-    const newProject = new BrandProject(req.body);
+    const images = await uploadImages(req.files);
+    const newProject = new BrandProject({ ...req.body, images });
     await newProject.save();
+
+    notifyNewSubmission({
+      resourceLabel: "brand identity request",
+      submitterEmail: newProject.email,
+      submitterName: newProject.fullName,
+      fields: {
+        "Full Name": newProject.fullName,
+        "Business Name": newProject.businessName,
+        Email: newProject.email,
+        "Brand Type": newProject.brandType,
+        Services: newProject.services,
+        Description: newProject.description,
+        Images: newProject.images,
+      },
+    });
+
+    emitNewLead("brand", newProject._id);
+
     res.status(201).json({ message: "Brand project submitted successfully!" });
   })
 );
 
+/**
+ * @swagger
+ * /brand:
+ *   get:
+ *     summary: List brand project requests (paginated, filterable, searchable)
+ *     tags: [Brand]
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - $ref: '#/components/parameters/PageParam'
+ *       - $ref: '#/components/parameters/LimitParam'
+ *       - $ref: '#/components/parameters/StatusParam'
+ *       - $ref: '#/components/parameters/SortParam'
+ *       - $ref: '#/components/parameters/SearchParam'
+ *       - $ref: '#/components/parameters/IncludeDeletedParam'
+ *     responses:
+ *       200: { description: "{ data, total, page, pages }" }
+ *       401: { $ref: '#/components/responses/Unauthorized' }
+ */
 router.get(
   "/",
   auth,
@@ -36,6 +121,29 @@ router.get(
   })
 );
 
+/**
+ * @swagger
+ * /brand/{id}/status:
+ *   patch:
+ *     summary: Update a brand project's status
+ *     tags: [Brand]
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - { name: id, in: path, required: true, schema: { type: string } }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [status]
+ *             properties:
+ *               status: { type: string, enum: [new, in-progress, won, lost] }
+ *     responses:
+ *       200: { description: Updated document }
+ *       401: { $ref: '#/components/responses/Unauthorized' }
+ *       404: { $ref: '#/components/responses/NotFound' }
+ */
 router.patch(
   "/:id/status",
   auth,
@@ -52,6 +160,21 @@ router.patch(
   })
 );
 
+/**
+ * @swagger
+ * /brand/{id}:
+ *   delete:
+ *     summary: Soft-delete a brand project request (admin role only)
+ *     tags: [Brand]
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - { name: id, in: path, required: true, schema: { type: string } }
+ *     responses:
+ *       200: { description: Deleted (deletedAt set) }
+ *       401: { $ref: '#/components/responses/Unauthorized' }
+ *       403: { $ref: '#/components/responses/Forbidden' }
+ *       404: { $ref: '#/components/responses/NotFound' }
+ */
 router.delete(
   "/:id",
   auth,
