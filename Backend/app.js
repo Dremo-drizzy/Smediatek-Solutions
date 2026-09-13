@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
 import helmet from "helmet";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger.js";
@@ -33,6 +34,14 @@ app.use("/api/v1", apiLimiter);
 
 app.get("/", (req, res) => {
   res.send("SmediaTek Backend is running!");
+});
+
+app.get("/health", (req, res) => {
+  res.json({
+    status: "ok",
+    uptime: process.uptime(),
+    dbState: mongoose.connection.readyState,
+  });
 });
 
 app.use("/api/v1/auth", authRoutes);

@@ -1,6 +1,8 @@
+import logger from "../utils/logger.js";
+
 // eslint-disable-next-line no-unused-vars
 const errorHandler = (err, req, res, next) => {
-  console.error("❌", err);
+  logger.error(err.message, { stack: err.stack, path: req.originalUrl, method: req.method });
 
   if (err.name === "CastError") {
     return res.status(400).json({ message: "Invalid ID." });
