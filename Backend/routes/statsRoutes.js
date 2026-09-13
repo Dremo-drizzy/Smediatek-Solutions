@@ -32,6 +32,18 @@ const getStartOfMonthsAgo = (n) => {
   return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - (n - 1), 1));
 };
 
+/**
+ * @swagger
+ * /stats/overview:
+ *   get:
+ *     summary: Monthly lead counts (last 12 months) and status breakdown, per resource
+ *     tags: [Stats]
+ *     security: [{ bearerAuth: [] }]
+ *     responses:
+ *       200:
+ *         description: "{ months: string[], monthly: { [resource]: {month,count}[] }, statusBreakdown: { [resource]: {status,count}[] } }"
+ *       401: { $ref: '#/components/responses/Unauthorized' }
+ */
 router.get(
   "/overview",
   auth,

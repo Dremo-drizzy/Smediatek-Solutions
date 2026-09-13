@@ -10,6 +10,7 @@ const BrandSchema = new mongoose.Schema(
     brandType: { type: String, required: true },
     services: [{ type: String }],
     description: { type: String, trim: true },
+    images: [{ type: String }],
     date: { type: Date, default: Date.now },
     status: { type: String, enum: BRAND_STATUSES, default: BRAND_STATUSES[0] },
     deletedAt: { type: Date, default: null },

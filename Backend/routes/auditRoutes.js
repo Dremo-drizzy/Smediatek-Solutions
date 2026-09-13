@@ -6,6 +6,21 @@ import { parsePagination, buildListResponse } from "../utils/pagination.js";
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /audit:
+ *   get:
+ *     summary: List audit log entries, newest first (admin role only)
+ *     tags: [Audit]
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - $ref: '#/components/parameters/PageParam'
+ *       - $ref: '#/components/parameters/LimitParam'
+ *     responses:
+ *       200: { description: "{ data, total, page, pages }, each entry with adminId populated to { _id, email }" }
+ *       401: { $ref: '#/components/responses/Unauthorized' }
+ *       403: { $ref: '#/components/responses/Forbidden' }
+ */
 router.get(
   "/",
   auth,

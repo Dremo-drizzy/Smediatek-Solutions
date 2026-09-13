@@ -16,11 +16,25 @@ function CTASection() {
     services: [],
     description: "",
   });
+  const [images, setImages] = useState([]);
   const [alert, setAlert] = useState({ show: false, variant: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const MAX_IMAGES = 3;
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const handleImagesChange = (e) => {
+    const selected = Array.from(e.target.files || []);
+    if (selected.length > MAX_IMAGES) {
+      setAlert({ show: true, variant: "danger", message: `❌ You can attach up to ${MAX_IMAGES} images.` });
+      e.target.value = "";
+      setImages([]);
+      return;
+    }
+    setImages(selected);
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -40,9 +54,19 @@ function CTASection() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await axios.post(`${API}/api/v1/brand`, formData);
+      const data = new FormData();
+      data.append("fullName", formData.fullName);
+      data.append("businessName", formData.businessName);
+      data.append("email", formData.email);
+      data.append("brandType", formData.brandType);
+      data.append("services", JSON.stringify(formData.services));
+      data.append("description", formData.description);
+      images.forEach((file) => data.append("images", file));
+
+      await axios.post(`${API}/api/v1/brand`, data);
       setAlert({ show: true, variant: "success", message: "✅ Brand project submitted successfully!" });
       setFormData({ fullName: "", businessName: "", email: "", brandType: "", services: [], description: "" });
+      setImages([]);
       setShow(false);
     } catch (error) {
       console.error(error);
@@ -134,6 +158,16 @@ function CTASection() {
             <Form.Group className="mb-3">
               <Form.Label>Project Description</Form.Label>
               <Form.Control as="textarea" rows={3} name="description" value={formData.description} onChange={handleChange} required />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Reference Images (optional, up to {MAX_IMAGES})</Form.Label>
+              <Form.Control type="file" accept="image/*" multiple onChange={handleImagesChange} />
+              {images.length > 0 && (
+                <Form.Text className="text-muted">
+                  {images.length} image{images.length === 1 ? "" : "s"} selected
+                </Form.Text>
+              )}
             </Form.Group>
 
             <Button variant="primary" type="submit" className="w-100">
