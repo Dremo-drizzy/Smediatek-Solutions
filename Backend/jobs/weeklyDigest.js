@@ -5,6 +5,7 @@ import LivestreamRequest from "../models/LivestreamRequest.js";
 import TrainingEnrollment from "../models/TrainingEnrollment.js";
 import { sendMail } from "../utils/mailer.js";
 import { weeklyDigestEmail } from "../emails/weeklyDigestEmail.js";
+import logger from "../utils/logger.js";
 
 const RESOURCES = [
   { Model: Contact, label: "Contact messages" },
@@ -33,7 +34,7 @@ export const scheduleWeeklyDigest = () => {
     "0 8 * * 1",
     () => {
       runWeeklyDigest().catch((error) => {
-        console.error("❌ Failed to send weekly digest:", error.message);
+        logger.error("Failed to send weekly digest", { error: error.message });
       });
     },
     { timezone: "America/Halifax" }

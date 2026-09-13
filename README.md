@@ -1,5 +1,7 @@
 # SmediaTek Solutions
 
+[![CI](https://github.com/Dremo-drizzy/Smediatek-Solutions/actions/workflows/ci.yml/badge.svg)](https://github.com/Dremo-drizzy/Smediatek-Solutions/actions/workflows/ci.yml)
+
 A MERN web app for a media, branding, livestreaming, and training agency. The public site lets visitors learn about the agency's services and submit inquiry forms (contact, brand identity, livestreaming, media training); an authenticated admin dashboard lets staff review and delete those submissions.
 
 ## Architecture
@@ -7,6 +9,20 @@ A MERN web app for a media, branding, livestreaming, and training agency. The pu
 - **Backend/** — Express 5 + Mongoose REST API, MongoDB Atlas for storage. JWT-based admin auth, zod request validation, and standard API hardening (helmet, rate limiting, Mongo operator-injection sanitization).
 - **Frontend/** — React 19 + Vite SPA (react-router-dom, react-bootstrap). Public pages hit the API to submit forms; the `/Admin` page is gated behind an admin login and shows/deletes all submitted records.
 - Both are deployed independently (backend on Render); locally they run as two separate dev servers.
+
+## Quick start (Docker)
+
+The fastest way to get the backend running locally, with no MongoDB Atlas account or manual `.env` setup required:
+
+```bash
+docker compose up
+```
+
+This builds the backend image and starts it alongside a throwaway MongoDB container, wired together automatically. The API is then available at `http://localhost:5000`.
+
+Transactional email and image uploads need real Resend/Cloudinary credentials to actually work — without them, submissions still save fine, they just skip sending email / attaching images. To enable them (or to seed an admin account), create a `.env` file in the repo root (same folder as `docker-compose.yml`) with any of `JWT_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `RESEND_API_KEY`, `EMAIL_FROM`, `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` — Compose picks these up automatically. This is for local convenience only; the deployed backend on Render doesn't use Docker.
+
+This starts only the backend + database — for frontend development, follow the manual setup below.
 
 ## Setup
 
