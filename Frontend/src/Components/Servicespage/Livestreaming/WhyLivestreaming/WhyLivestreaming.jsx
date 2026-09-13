@@ -72,7 +72,7 @@ function WhyLivestreaming() {
             data-aos="fade-up"
             data-aos-delay={usp.delay}
           >
-            <Card className="usp-card text-center h-100 w-100 p-3">
+            <Card className="usp-card glass-card text-center h-100 w-100 p-3">
               <Card.Body>
                 <div className="ups-wrapper">
                   <i className={usp.icon}></i>

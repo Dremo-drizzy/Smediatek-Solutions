@@ -67,7 +67,7 @@ function Learn() {
             data-aos="fade-up"
             data-aos-delay={item.delay}
           >
-            <Card className="h-100 text-center  learn-card">
+            <Card className="h-100 text-center learn-card glass-card">
               <Card.Body>
                 <div className="learn-icon mb-3">{item.icon}</div>
                 <Card.Title className="fw-bold fs-4">{item.title}</Card.Title>

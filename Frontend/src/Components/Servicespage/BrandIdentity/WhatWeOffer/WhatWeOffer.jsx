@@ -59,7 +59,7 @@ function WhatWeOffer() {
           <Row className="g-4">
             {values.map((val, index) => (
               <Col sm={12} md={6} key={index} data-aos="fade-up" data-aos-delay={val.delay}>
-                <Card className="value-card text-center h-100 p-2">
+                <Card className="value-card glass-card text-center h-100 p-2">
                   <Card.Body>
                     <div className="value-icon mb-3">{val.icon}</div>
                     <Card.Title className="fw-bold fs-5">{val.title}</Card.Title>
