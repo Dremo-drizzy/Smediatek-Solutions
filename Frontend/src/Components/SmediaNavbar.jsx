@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, Link } from "react-router-dom";
-import { Navbar, Nav, Offcanvas, Container, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav, Offcanvas, Container, NavDropdown, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/SmediaNavbar.css";
 
@@ -91,6 +91,10 @@ function SmediaNavbar() {
               >
                 Projects
               </Nav.Link>
+
+              <Button as={Link} to="/Contact" className="navbar-cta ms-lg-2">
+                Start a Project
+              </Button>
             </Nav>
 
             <div className="community-links visually-hidden">
