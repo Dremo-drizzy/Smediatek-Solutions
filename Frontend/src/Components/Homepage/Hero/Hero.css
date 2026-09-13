@@ -1,0 +1,50 @@
+.home-hero {
+  min-height: 85vh;
+  position: relative;
+  z-index: 1;
+  padding: 6rem 1rem 3rem;
+}
+
+.hero-headline {
+  font-size: 2.25rem;
+  line-height: 1.15;
+  color: var(--color-ink);
+}
+
+.hero-subtext {
+  color: var(--color-ink-soft);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 640px;
+}
+
+.hero-cta-row {
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 576px) {
+  .hero-headline {
+    font-size: 2.75rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-headline {
+    font-size: 3.5rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .home-hero {
+    min-height: 90vh;
+    padding-top: 7rem;
+  }
+
+  .hero-headline {
+    font-size: 4rem;
+  }
+
+  .hero-subtext {
+    font-size: 1.15rem;
+  }
+}
