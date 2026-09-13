@@ -1,6 +1,7 @@
 import request from "supertest";
 import { connectTestDb, closeTestDb, clearTestDb } from "../setupDb.js";
 import { createAdmin } from "../helpers.js";
+import logger from "../../utils/logger.js";
 
 let app;
 let Admin;
@@ -104,14 +105,14 @@ describe("POST /api/v1/auth/reset-password", () => {
   it("resets the password end-to-end via a real forgot-password token", async () => {
     await createAdmin({ email: "admin@example.com", password: "OldPassword123!" });
 
-    // Capture the raw token from the console log (no email provider wired
-    // up for this flow yet — see authRoutes.js).
-    const logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
+    // Capture the raw token from the logged reset link (no email provider
+    // wired up for this flow yet — see authRoutes.js).
+    const infoSpy = jest.spyOn(logger, "info").mockImplementation(() => {});
     await request(app).post("/api/v1/auth/forgot-password").send({ email: "admin@example.com" });
-    const loggedLine = logSpy.mock.calls.map((args) => args.join(" ")).find((line) => line.includes("token="));
-    logSpy.mockRestore();
+    const call = infoSpy.mock.calls.find(([, meta]) => meta?.resetLink);
+    infoSpy.mockRestore();
 
-    const rawToken = new URL(loggedLine.split(": ").pop()).searchParams.get("token");
+    const rawToken = new URL(call[1].resetLink).searchParams.get("token");
 
     const reset = await request(app)
       .post("/api/v1/auth/reset-password")

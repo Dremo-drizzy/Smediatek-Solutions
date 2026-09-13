@@ -6,6 +6,7 @@ import Admin from "../models/Admin.js";
 import { loginLimiter, forgotPasswordLimiter } from "../middleware/rateLimiters.js";
 import asyncHandler from "../middleware/asyncHandler.js";
 import validate, { forgotPasswordSchema, resetPasswordSchema } from "../middleware/validate.js";
+import logger from "../utils/logger.js";
 
 const router = express.Router();
 
@@ -109,7 +110,7 @@ router.post(
 
       const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${rawToken}`;
       // Email isn't wired up yet — log the link so it can be used manually for now.
-      console.log(`🔑 Password reset link for ${admin.email}: ${resetLink}`);
+      logger.info("Password reset link generated", { email: admin.email, resetLink });
     }
 
     // Same response whether or not the email exists, so this endpoint can't be
