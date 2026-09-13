@@ -1,38 +1,64 @@
 .custom-navbar {
-  background-color: transparent !important;
-  transition: all 0.4s ease;
-  backdrop-filter: none;
+  background: rgba(10, 14, 23, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background-color 0.4s ease;
   outline: none !important;
   box-shadow: none !important;
 }
 
 .custom-navbar.scrolled {
-  background-color: rgba(22, 22, 22, 0.9) !important;
-  backdrop-filter: blur(10px);
+  background: rgba(10, 14, 23, 0.75);
 }
 
 .nav-link {
   position: relative;
-  color: white !important;
+  color: var(--color-ink, white) !important;
   font-size: 16px;
   text-decoration: none !important;
   padding: 0.5rem 1rem !important;
   transition: color 0.3s ease;
 }
 
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 0.15rem;
+  height: 2px;
+  width: 0;
+  background: var(--color-secondary, #FF7A29);
+  transition: width 0.25s ease;
+}
+
 .nav-link:hover {
-  color: rgb(69, 69, 255) !important;
+  color: var(--color-ink, white) !important;
   text-decoration: none !important;
 }
 
+.nav-link:hover::after {
+  width: calc(100% - 2rem);
+}
+
 .nav-link.active {
-  background-color: rgb(69, 69, 255) !important;
+  background-color: var(--color-primary, rgb(69, 69, 255)) !important;
   border-radius: 10px;
   color: white !important;
 }
 
+.nav-link.active::after {
+  display: none;
+}
+
+.navbar-cta {
+  padding: 0.5rem 1.25rem !important;
+  font-size: 0.95rem;
+}
+
 .custom-navbar .dropdown-toggle {
-  color: white !important;
+  color: var(--color-ink, white) !important;
   font-size: 16px;
 }
 
@@ -48,26 +74,36 @@
 
 @media (max-width: 991px) {
   .offcanvas {
-    background: rgba(255, 255, 255, 0.05) !important;
+    background: rgba(10, 14, 23, 0.92) !important;
     backdrop-filter: blur(20px) !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     outline: none;
   }
   .offcanvas-body {
     align-items: start !important;
-  } 
+  }
 
   .nav-link.active {
     max-width: 20%;
   }
 
+  .navbar-cta {
+    margin-top: 1rem;
+    width: 100%;
+  }
+
   .title {
-    background: linear-gradient(45deg, #00d4ff, #ff6b6b, #4ecdc4, #45b7d1);
+    background: linear-gradient(90deg, var(--color-primary, #4F5BFF), var(--color-secondary, #FF7A29));
     background-size: 300% 300%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: 1.5rem;
-    animation: gradientShift 4s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .title {
+      animation: gradientShift 4s ease-in-out infinite;
+    }
   }
 
   .custom-navbar .nav-link {
