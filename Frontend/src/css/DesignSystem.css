@@ -104,6 +104,20 @@ a:hover {
   color: var(--color-secondary) !important;
 }
 
+/* Bootstrap's .text-muted hardcodes a grey meant for light backgrounds
+   (#6c757d-ish) — on our dark bg it's nearly invisible. Used across 10+
+   components for subheads/captions, so overridden globally rather than
+   fixed per call site. */
+.text-muted {
+  color: var(--color-ink-faint) !important;
+}
+
+/* Same problem as .text-muted: Bootstrap's default secondary grey is
+   meant for light backgrounds and is nearly invisible on ours. */
+.text-secondary {
+  color: var(--color-ink-soft) !important;
+}
+
 /* ============ Site-wide animated gradient-mesh background ============ */
 
 .bg-blobs {
