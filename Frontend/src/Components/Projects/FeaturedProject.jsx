@@ -13,7 +13,7 @@ const FeaturedProject = () => {
       <Row className="align-items-center" data-aos="fade-up">
         <Col md={6} data-aos="fade-right">
           <img
-            src="https:
+            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f"
             alt="Featured Project"
             className="img-fluid rounded shadow"
           />

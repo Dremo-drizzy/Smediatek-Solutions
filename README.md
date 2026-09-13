@@ -1,5 +1,7 @@
 # SmediaTek Solutions
 
+[![CI](https://github.com/Dremo-drizzy/Smediatek-Solutions/actions/workflows/ci.yml/badge.svg)](https://github.com/Dremo-drizzy/Smediatek-Solutions/actions/workflows/ci.yml)
+
 A MERN web app for a media, branding, livestreaming, and training agency. The public site lets visitors learn about the agency's services and submit inquiry forms (contact, brand identity, livestreaming, media training); an authenticated admin dashboard lets staff review and delete those submissions.
 
 ## Architecture
