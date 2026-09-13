@@ -339,6 +339,16 @@ a:hover {
   color: var(--color-ink-faint);
 }
 
+/* The <select> box itself picks up the dark theme above, but its native
+   <option> popup renders on the OS's own (usually white) background —
+   the light .form-select text color was inheriting straight into it,
+   making every option unreadable. Force each option's own colors so it
+   stays legible regardless of which background the browser gives it. */
+.form-select option {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+}
+
 .form-control:focus,
 .form-select:focus {
   background-color: var(--color-surface);
