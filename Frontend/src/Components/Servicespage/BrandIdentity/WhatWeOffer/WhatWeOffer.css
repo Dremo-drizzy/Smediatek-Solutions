@@ -16,23 +16,6 @@
 }
 
 
-.values-button{
-  background-color: rgb(196, 208, 253) !important;
-  border: none;
-  color: blue;
-  padding: 10px 20px;
-  border-radius: 20px;
-  font-size: 16px;
-  margin-top: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.values-button:hover{
-  background: linear-gradient(135deg, #2563eb, #7e22ce);
-  color: #ffffff;
-  transform: translateY(-3px);
-
-}
 
 
 @media (max-width: 767px) {
