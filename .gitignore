@@ -13,6 +13,9 @@ yarn-debug.log*
 dist/
 build/
 
+# Ignore test coverage reports
+coverage/
+
 # Ignore editor settings
 .vscode/
 
