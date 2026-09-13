@@ -3,7 +3,7 @@ import BrandProject, { BRAND_STATUSES } from "../models/BrandProject.js";
 import auth, { requireRole } from "../middleware/auth.js";
 import validate, { brandSchema, brandStatusSchema } from "../middleware/validate.js";
 import asyncHandler from "../middleware/asyncHandler.js";
-import upload from "../middleware/upload.js";
+import upload, { verifyImageContent } from "../middleware/upload.js";
 import { buildFilter, parsePagination, parseSort, buildListResponse } from "../utils/pagination.js";
 import { logAction } from "../utils/audit.js";
 import { notifyNewSubmission } from "../utils/notifyNewSubmission.js";
@@ -58,6 +58,7 @@ const SORT_FIELDS = ["createdAt", "email", "status"];
 router.post(
   "/",
   upload.array("images", 3),
+  verifyImageContent,
   parseServicesField,
   validate(brandSchema),
   asyncHandler(async (req, res) => {
