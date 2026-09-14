@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Spinner, Alert, Table, Button, Card, Row, Col, Toast, ToastContainer } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Spinner, Alert, Table, Button, Card, Row, Col, Toast, ToastContainer, Form } from "react-bootstrap";
 import usePaginatedResource from "../hooks/usePaginatedResource";
 import useLeadSocket from "../hooks/useLeadSocket";
 import api from "../utils/api";
@@ -9,6 +9,89 @@ const RESOURCE_LABELS = {
   brand: "brand identity request",
   livestream: "livestream request",
   training: "training enrollment",
+};
+
+const STATUS_OPTIONS = {
+  contact: ["new", "read", "archived"],
+  brand: ["new", "in-progress", "won", "lost"],
+  livestream: ["new", "in-progress", "won", "lost"],
+  training: ["pending", "confirmed", "completed"],
+};
+
+// Debounces the search box so it doesn't refetch on every keystroke.
+const useDebouncedValue = (value, delayMs) => {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() => {
+    const timer = setTimeout(() => setDebounced(value), delayMs);
+    return () => clearTimeout(timer);
+  }, [value, delayMs]);
+  return debounced;
+};
+
+const SearchAndFilter = ({ resourceKey, resource }) => {
+  const [searchInput, setSearchInput] = useState(resource.search);
+  const debouncedSearch = useDebouncedValue(searchInput, 400);
+
+  useEffect(() => {
+    resource.setSearch(debouncedSearch);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearch]);
+
+  return (
+    <Row className="g-2 mb-3">
+      <Col sm={8} md={9}>
+        <Form.Control
+          size="sm"
+          placeholder="Search..."
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+        />
+      </Col>
+      <Col sm={4} md={3}>
+        <Form.Select
+          size="sm"
+          value={resource.status}
+          onChange={(e) => resource.setStatus(e.target.value)}
+        >
+          <option value="">All statuses</option>
+          {STATUS_OPTIONS[resourceKey].map((s) => (
+            <option key={s} value={s}>{s}</option>
+          ))}
+        </Form.Select>
+      </Col>
+    </Row>
+  );
+};
+
+const StatusSelect = ({ resourceKey, resource, item }) => {
+  const [saving, setSaving] = useState(false);
+
+  const handleStatusChange = async (e) => {
+    const newStatus = e.target.value;
+    setSaving(true);
+    try {
+      await resource.updateStatus(item._id, newStatus);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update status.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <Form.Select
+      size="sm"
+      value={item.status}
+      disabled={saving}
+      onChange={handleStatusChange}
+      style={{ minWidth: 120, display: "inline-block", width: "auto" }}
+    >
+      {STATUS_OPTIONS[resourceKey].map((s) => (
+        <option key={s} value={s}>{s}</option>
+      ))}
+    </Form.Select>
+  );
 };
 
 const Pager = ({ page, pages, onPageChange }) => {
@@ -118,6 +201,7 @@ const AdminMessages = () => {
                 isAdmin={isAdmin}
                 endpoint="/contact"
               />
+              <SearchAndFilter resourceKey="contact" resource={contact} />
               {contact.loading ? (
                 <div className="text-center py-3">
                   <Spinner animation="border" className="text-primary" />
@@ -136,6 +220,7 @@ const AdminMessages = () => {
                           <th>Name</th>
                           <th>Email</th>
                           <th>Message</th>
+                          <th>Status</th>
                           <th>Date</th>
                           <th>Action</th>
                         </tr>
@@ -147,6 +232,13 @@ const AdminMessages = () => {
                             <td>{msg.name}</td>
                             <td>{msg.email}</td>
                             <td style={{ maxWidth: "300px" }}>{msg.message}</td>
+                            <td>
+                              {isAdmin ? (
+                                <StatusSelect resourceKey="contact" resource={contact} item={msg} />
+                              ) : (
+                                msg.status
+                              )}
+                            </td>
                             <td>
                               {new Date(msg.createdAt).toLocaleDateString()}
                             </td>
@@ -183,6 +275,7 @@ const AdminMessages = () => {
                 isAdmin={isAdmin}
                 endpoint="/brand"
               />
+              <SearchAndFilter resourceKey="brand" resource={brand} />
               {brand.loading ? (
                 <div className="text-center py-3">
                   <Spinner animation="border" className="text-primary" />
@@ -205,6 +298,7 @@ const AdminMessages = () => {
                           <th>Services</th>
                           <th>Description</th>
                           <th>Images</th>
+                          <th>Status</th>
                           <th>Date</th>
                           <th>Action</th>
                         </tr>
@@ -234,6 +328,13 @@ const AdminMessages = () => {
                                 </div>
                               ) : (
                                 "—"
+                              )}
+                            </td>
+                            <td>
+                              {isAdmin ? (
+                                <StatusSelect resourceKey="brand" resource={brand} item={p} />
+                              ) : (
+                                p.status
                               )}
                             </td>
                             <td>{new Date(p.date || p.createdAt).toLocaleDateString()}</td>
@@ -270,6 +371,7 @@ const AdminMessages = () => {
                 isAdmin={isAdmin}
                 endpoint="/livestream"
               />
+              <SearchAndFilter resourceKey="livestream" resource={livestream} />
               {livestream.loading ? (
                 <div className="text-center py-3">
                   <Spinner animation="border" className="text-primary" />
@@ -291,6 +393,7 @@ const AdminMessages = () => {
                           <th>Event Type</th>
                           <th>Services</th>
                           <th>Details</th>
+                          <th>Status</th>
                           <th>Date</th>
                           <th>Action</th>
                         </tr>
@@ -305,6 +408,13 @@ const AdminMessages = () => {
                             <td>{r.eventType || "N/A"}</td>
                             <td style={{ maxWidth: "200px" }}>{r.services ? r.services.join(", ") : "N/A"}</td>
                             <td style={{ maxWidth: "300px" }}>{r.details || "—"}</td>
+                            <td>
+                              {isAdmin ? (
+                                <StatusSelect resourceKey="livestream" resource={livestream} item={r} />
+                              ) : (
+                                r.status
+                              )}
+                            </td>
                             <td>{new Date(r.date || r.createdAt).toLocaleDateString()}</td>
                             <td>
                               {isAdmin && (
@@ -339,6 +449,7 @@ const AdminMessages = () => {
                 isAdmin={isAdmin}
                 endpoint="/training"
               />
+              <SearchAndFilter resourceKey="training" resource={training} />
               {training.loading ? (
                 <div className="text-center py-3">
                   <Spinner animation="border" className="text-primary" />
@@ -360,6 +471,7 @@ const AdminMessages = () => {
                           <th>Focus</th>
                           <th>Mode</th>
                           <th>Goals</th>
+                          <th>Status</th>
                           <th>Date</th>
                           <th>Action</th>
                         </tr>
@@ -374,6 +486,13 @@ const AdminMessages = () => {
                             <td>{t.focus || t.course || "N/A"}</td>
                             <td>{t.mode || "N/A"}</td>
                             <td style={{ maxWidth: "300px" }}>{t.goals || "—"}</td>
+                            <td>
+                              {isAdmin ? (
+                                <StatusSelect resourceKey="training" resource={training} item={t} />
+                              ) : (
+                                t.status
+                              )}
+                            </td>
                             <td>{new Date(t.date || t.createdAt).toLocaleDateString()}</td>
                             <td>
                               {isAdmin && (

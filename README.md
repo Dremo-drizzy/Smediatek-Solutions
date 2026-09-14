@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Dremo-drizzy/Smediatek-Solutions/actions/workflows/ci.yml/badge.svg)](https://github.com/Dremo-drizzy/Smediatek-Solutions/actions/workflows/ci.yml)
 
-A MERN web app for a media, branding, livestreaming, and training agency. The public site lets visitors learn about the agency's services and submit inquiry forms (contact, brand identity, livestreaming, media training); an authenticated admin dashboard lets staff review submissions, manage the portfolio, export leads to CSV, and audit admin activity.
+A MERN web app for a media, branding, livestreaming, and training agency. The public site lets visitors learn about the agency's services and submit inquiry forms (contact, brand identity, livestreaming, media training); an authenticated admin dashboard lets staff search/filter/paginate submissions, update their pipeline status, manage the portfolio, export leads to CSV, and audit admin activity.
 
 **Live**: [smediatek-solutions-frontend.onrender.com](https://smediatek-solutions-frontend.onrender.com) — API at [smediatek-solutions.onrender.com](https://smediatek-solutions.onrender.com) ([`/health`](https://smediatek-solutions.onrender.com/health)). Both are on Render's free tier and spin down after inactivity, so the first request after a while can take 30-60s to wake up.
 
