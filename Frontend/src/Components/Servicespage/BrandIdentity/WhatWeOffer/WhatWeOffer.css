@@ -8,7 +8,20 @@
 }
 
 .value-icon {
-  font-size: 2.5rem;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  background: var(--color-secondary-soft);
+  color: var(--color-secondary);
+}
+
+.value-icon svg {
+  width: 28px;
+  height: 28px;
 }
 
 
