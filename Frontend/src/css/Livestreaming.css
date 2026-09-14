@@ -3,13 +3,13 @@
 }
 
 .bg-hero-2 {
-  background: var(--surface-color);
+  background: var(--color-surface);
 }
 
 .showcase {
   height: 60vh;
   background: url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3") center/cover no-repeat;
-  color: var(--on-primary-color);
+  color: var(--color-ink);
   text-shadow: 0px 2px 6px rgba(0,0,0,0.5);
 }
 
@@ -29,9 +29,9 @@
 }
 
 .pricing-card.recommended {
-  border: 2px solid var(--secondary-color);
+  border: 2px solid var(--color-secondary);
 }
 
 .cta {
-  background: var(--on-surface-color);
+  background: var(--color-bg);
 }

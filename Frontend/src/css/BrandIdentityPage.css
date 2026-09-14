@@ -12,7 +12,7 @@
 }
 
 .story-section {
-  background: var(--on-surface-color);
+  background: var(--color-bg);
 }
 .section-title {
   font-size: var(--font-size-xl);
@@ -30,7 +30,7 @@
 }
 
 .cta {
-  background: var(--on-surface-color);
+  background: var(--color-bg);
 }
 .cta-title {
   font-size: var(--font-size-xl);

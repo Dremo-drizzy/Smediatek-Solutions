@@ -1,11 +1,7 @@
 .learn-card {
-  border-radius: 15px;
-  background: #fbfbfb;
   transition: all 0.3s ease;
-  border: none;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
-  position: relative;    
-  overflow: hidden;    
+  position: relative;
+  overflow: hidden;
 }
 
 .learn-card:hover{
@@ -28,6 +24,19 @@
   opacity: 1;
 }
 
-.learn-icon{
-  font-size: 2.5rem;
+.learn-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  background: var(--color-secondary-soft);
+  color: var(--color-secondary);
+}
+
+.learn-icon svg {
+  width: 28px;
+  height: 28px;
 }

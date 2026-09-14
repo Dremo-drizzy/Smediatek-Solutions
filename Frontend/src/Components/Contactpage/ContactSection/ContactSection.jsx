@@ -71,7 +71,7 @@ function ContactSection() {
         </div>
 
         <div
-          className="contact p-4 rounded w-75 mx-auto shadow-lg bg-light"
+          className="contact glass-card p-4 rounded w-75 mx-auto shadow-lg"
           data-aos="fade-up"
           data-aos-delay="400"
         >
