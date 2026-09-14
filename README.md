@@ -2,13 +2,26 @@
 
 [![CI](https://github.com/Dremo-drizzy/Smediatek-Solutions/actions/workflows/ci.yml/badge.svg)](https://github.com/Dremo-drizzy/Smediatek-Solutions/actions/workflows/ci.yml)
 
-A MERN web app for a media, branding, livestreaming, and training agency. The public site lets visitors learn about the agency's services and submit inquiry forms (contact, brand identity, livestreaming, media training); an authenticated admin dashboard lets staff review and delete those submissions.
+A MERN web app for a media, branding, livestreaming, and training agency. The public site lets visitors learn about the agency's services and submit inquiry forms (contact, brand identity, livestreaming, media training); an authenticated admin dashboard lets staff review submissions, manage the portfolio, export leads to CSV, and audit admin activity.
+
+**Live**: [smediatek-solutions-frontend.onrender.com](https://smediatek-solutions-frontend.onrender.com) — API at [smediatek-solutions.onrender.com](https://smediatek-solutions.onrender.com) ([`/health`](https://smediatek-solutions.onrender.com/health)). Both are on Render's free tier and spin down after inactivity, so the first request after a while can take 30-60s to wake up.
 
 ## Architecture
 
 - **Backend/** — Express 5 + Mongoose REST API, MongoDB Atlas for storage. JWT-based admin auth, zod request validation, and standard API hardening (helmet, rate limiting, Mongo operator-injection sanitization).
 - **Frontend/** — React 19 + Vite SPA (react-router-dom, react-bootstrap). Public pages hit the API to submit forms; the `/Admin` page is gated behind an admin login and shows/deletes all submitted records.
-- Both are deployed independently (backend on Render); locally they run as two separate dev servers.
+- Both are deployed independently on Render; locally they run as two separate dev servers.
+
+## What changed
+
+Originally a functional but unhardened MERN app, it went through several rounds of work:
+
+- **Security**: JWT-based admin auth replacing an unauthenticated dashboard, Zod request validation on every write route, Helmet + rate limiting + Mongo operator-injection sanitization, and soft-delete (`deletedAt`) instead of destructive deletes so admin actions are recoverable and auditable.
+- **API design**: consistent pagination/filtering/sorting/search across every list route, a real audit log (`/api/v1/audit`) recording who did what and when, and a stats endpoint powering the dashboard's lead chart.
+- **Portfolio CMS**: an admin-managed portfolio (create/edit/reorder/soft-delete) replacing hardcoded project data, backing the public Projects page.
+- **Integrations**: Cloudinary image uploads for brand requests, transactional email via Resend, real-time new-lead notifications over Socket.IO.
+- **Reliability**: a Jest + Supertest suite (83 tests) against an in-memory MongoDB, a GitHub Actions CI pipeline, structured logging (Winston), Docker Compose for one-command local setup, and a `/health` endpoint for uptime checks.
+- **Frontend redesign**: a full visual overhaul from a generic light-theme SaaS look to a dark, animated glassmorphic design — gradient-mesh backgrounds, hover-tilt cards, a marquee, and a consistent design-token system across every page and Bootstrap component.
 
 ## Quick start (Docker)
 
@@ -78,7 +91,8 @@ All request/response bodies are JSON. Routes marked "Admin (JWT)" require an `Au
 
 | Method | Path | Auth | Purpose |
 | --- | --- | --- | --- |
-| GET | `/` | Public | Health check |
+| GET | `/` | Public | Basic liveness check |
+| GET | `/health` | Public | Health check — includes uptime and MongoDB connection state |
 | POST | `/api/v1/auth/login` | Public | Admin login — verifies email/password, returns a 7-day JWT |
 | POST | `/api/v1/contact` | Public | Submit a contact form message |
 | GET | `/api/v1/contact` | Admin (JWT) | List contact messages — paginated, filterable, searchable (see below) |
@@ -97,6 +111,12 @@ All request/response bodies are JSON. Routes marked "Admin (JWT)" require an `Au
 | PATCH | `/api/v1/training/:id/status` | Admin (JWT) | Update a training enrollment's status (`pending`/`confirmed`/`completed`) |
 | DELETE | `/api/v1/training/:id` | Admin (JWT) | Soft-delete a training enrollment |
 | GET | `/api/v1/stats/overview` | Admin (JWT) | Monthly lead counts (last 12 months) and status breakdown, per resource |
+| GET | `/api/v1/portfolio` | Public | List portfolio items, sorted by display order |
+| POST | `/api/v1/portfolio` | Admin (JWT) | Create a portfolio item |
+| PATCH | `/api/v1/portfolio/:id` | Admin (JWT) | Update a portfolio item (including reordering) |
+| DELETE | `/api/v1/portfolio/:id` | Admin (JWT) | Soft-delete a portfolio item |
+| GET | `/api/v1/audit` | Admin (JWT) | List audit log entries, newest first — paginated, `adminId` populated to `{ _id, email }` |
+| GET | `/api/v1/:resource/export` | Admin (JWT) | Export a resource's records as CSV (`contact`, `brand`, `livestream`, or `training`) |
 
 ### GET list query parameters
 
