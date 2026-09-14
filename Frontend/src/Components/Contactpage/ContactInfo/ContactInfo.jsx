@@ -69,7 +69,7 @@ function ContactInfo() {
               <Card.Title className="fw-bold mb-2">
                 {contact.title}
               </Card.Title>
-              <Card.Text className="contact-text">{contact.text}</Card.Text>
+              <Card.Text as="div" className="contact-text">{contact.text}</Card.Text>
             </Card>
           </Col>
         ))}
