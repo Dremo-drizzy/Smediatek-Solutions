@@ -3,55 +3,19 @@ import ImpactHighlights from "../Components/Homepage/ImpactHighlights/ImpactHigh
 import OurServices from "../Components/Homepage/OurServices/OurServices";
 import CTA from "../Components/Homepage/CTA/CTA";
 import "../css/Home.css";
-import ServiceHero from "../Components/Servicespage/ServiceHero";
+import Hero from "../Components/Homepage/Hero/Hero";
+import Marquee from "../Components/Homepage/Marquee/Marquee";
 import Growth from "../Components/Homepage/Growth/Growth";
-import { Button, Col, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
 
 function Home() {
   return (
     <div className="homepage-wrapper">
-      <ServiceHero
-        title="Where Media Meets Technology."
-        subtitle="We bring your vision to life online. Whether it's through professional live streaming, building a strong brand identity, or providing expert tech training, we create digital experiences that truly connect and deliver."
-        bgImage="https://static.vecteezy.com/system/resources/thumbnails/046/866/784/original/dark-blue-technology-futuristic-elements-video.jpg"
-      >
-        <Row className="justify-content-center g-4 ">
-          <Col lg={5} md={5}>
-            <Link to="/Contact">
-              <Button
-                className="px-4 home-button rounded-pill h-100 w-100 "
-              >
-                Contact Us <i className="bi bi-arrow-right ms-2"></i>
-              </Button>
-            </Link>
-          </Col>
-          <Col lg={5} md={5}>
-            <Link to="/Livestreaming">
-              <Button
-
-                className="px-4 home-two-button rounded-pill btn-outline-light h-100 w-100 "
-              >
-                Livestreaming <i className="bi bi-arrow-right ms-2"></i>
-              </Button>
-            </Link>
-          </Col>
-        </Row>
-      </ServiceHero>
-
-      <div className="mid-white">
-        <Growth />
-      </div>
-
+      <Hero />
+      <Marquee />
+      <Growth />
       <ImpactHighlights />
-
-      <div className="parallax-bg">
-        <OurServices />
-      </div>
-
+      <OurServices />
       <WhySmediaTek />
-      
-
       <CTA />
     </div>
   );

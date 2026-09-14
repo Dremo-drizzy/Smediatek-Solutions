@@ -75,7 +75,7 @@ const Projects = () => {
                   <Row className="g-4">
                     {section.items.map((item) => (
                       <Col key={item._id} xs={12} sm={6} md={3} lg={3}>
-                        <Card className="project-card h-100 w-100">
+                        <Card className="project-card glass-card h-100 w-100">
                           <div className="project-image-container">
                             <Card.Img
                               variant="top"

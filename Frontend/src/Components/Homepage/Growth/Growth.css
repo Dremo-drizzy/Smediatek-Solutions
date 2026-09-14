@@ -1,7 +1,9 @@
 .growth-container {
-  background: #f8fcff;
+  background: transparent;
+  position: relative;
+  z-index: 1;
+  padding: 3rem 0;
 }
-
 
 .with-divider::after {
   content: "";
@@ -10,14 +12,15 @@
   top: 20%;
   height: 60%;
   width: 1px;
-  background-color: #d9d9d9;
+  background-color: var(--color-surface-border);
 }
 
 .growth-stat {
   font-size: 40px;
   font-weight: 700;
-  color: rgb(85, 85, 245);
+  color: var(--color-primary);
   line-height: 1;
+  font-family: var(--font-heading);
 }
 
 .growth-stat span {
@@ -29,13 +32,13 @@
 .growth-title {
   font-size: 17px;
   font-weight: 600;
-  color: #333;
+  color: var(--color-ink);
   margin-top: 1rem;
 }
 
 .growth-desc {
   font-size: 14px;
-  color: #555;
+  color: var(--color-ink-soft);
   line-height: 1.6;
   margin-top: 1rem;
 }
@@ -58,10 +61,10 @@
   .growth-item {
     min-height: auto;
     padding: 3rem 1.5rem;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--color-surface-border);
   }
 
-  
+
   .growth-item:last-child {
     border-bottom: none;
   }

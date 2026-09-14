@@ -31,24 +31,29 @@ function App() {
   if (loading) {
     return (
       <div
-        className="d-flex justify-content-center align-items-center vh-100 bg-light"
-        style={{ flexDirection: "column" }}
+        className="d-flex justify-content-center align-items-center vh-100"
+        style={{ flexDirection: "column", background: "var(--color-bg)" }}
       >
         <Spinner
           animation="border"
           role="status"
-          variant="primary"
-          style={{ width: "4rem", height: "4rem" }}
+          style={{ width: "4rem", height: "4rem", color: "var(--color-secondary)" }}
         >
           <span className="visually-hidden">Loading...</span>
         </Spinner>
-        <p className="mt-3 fw-semibold text-secondary">Loading, please wait...</p>
+        <p className="mt-3 fw-semibold" style={{ color: "var(--color-ink-soft)" }}>Loading, please wait...</p>
       </div>
     );
   }
 
   return (
     <>
+      <div className="bg-blobs" aria-hidden="true">
+        <div className="bg-blob bg-blob-1" />
+        <div className="bg-blob bg-blob-2" />
+        <div className="bg-blob bg-blob-3" />
+      </div>
+
       <ScrollToTop />
       <SmediaNavbar />
 

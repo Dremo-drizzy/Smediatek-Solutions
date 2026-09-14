@@ -47,7 +47,7 @@ function WhySmediaTek() {
       <Row className="g-4 mx-auto" >
         {usps.map((usp, index) => (
           <Col key={index} sm={12} md={6} lg={4} data-aos="fade-up" data-aos-delay={usp.delay}>
-            <Card className="usp-card text-center h-100 w-100 p-4" >
+            <Card className="usp-card glass-card text-center h-100 w-100 p-4" >
               <Card.Body >
                 <div className="ups-wrapper">
                   <i className={`bi ${usp.icon}`}></i>
