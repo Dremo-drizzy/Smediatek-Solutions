@@ -9,7 +9,7 @@ A MERN web app for a media, branding, livestreaming, and training agency. The pu
 ## Architecture
 
 - **Backend/** — Express 5 + Mongoose REST API, MongoDB Atlas for storage. JWT-based admin auth, zod request validation, and standard API hardening (helmet, rate limiting, Mongo operator-injection sanitization).
-- **Frontend/** — React 19 + Vite SPA (react-router-dom, react-bootstrap). Public pages hit the API to submit forms; the `/Admin` page is gated behind an admin login and shows/deletes all submitted records.
+- **Frontend/** — React 19 + Vite SPA (react-router-dom, react-bootstrap). Public pages hit the API to submit forms; the `/Admin` page is gated behind an admin login and lets staff search, filter, update and soft-delete submitted records.
 - Both are deployed independently on Render; locally they run as two separate dev servers.
 
 ## What changed
@@ -134,3 +134,9 @@ Every resource's GET list route accepts the same query params and returns `{ dat
 ### Database indexes
 
 Each schema indexes `email`, `createdAt`, and `status` individually, plus a compound text index over its string fields for `search`. These back the exact access patterns the admin dashboard uses at scale: listing by recency (`createdAt`), filtering by pipeline stage (`status`), looking up a lead by `email`, and free-text search — without indexes, each of those becomes a full collection scan as the data grows.
+
+## License
+
+MIT © Daniel Nwachukwu Chukwuemeka
+
+Built with Claude Code as a pair programmer.
